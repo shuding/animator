@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="animator">
+<head>
+    <title>Animator</title>
+    <script src="js/angular.min.js"></script>
+    <script src="js/animator.js"></script>
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+    <link rel="stylesheet" href="css/animator.css"/>
+</head>
+<body ng-controller="main">
+<div id="setting_bar" class="ui_window window_folded_{{folded}}">
+    <div class="title"><h1>Animator</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
+    <div class="content">
+        <div class="content_inner">
+            <h2>Canvas</h2>
+            <ul>
+                <li><span>Width:</span><input class="setting_input" id="width_input" type="number" placeholder="{{defaultWidth}}" ng-model="width" ng-change="redraw()"><span>px</span></li>
+                <li><span>Height:</span><input class="setting_input" id="height_input" type="number" placeholder="{{defaultHeight}}" ng-model="height" ng-change="redraw()"><span>px</span></li>
+                <li><span>BG Color:</span><input class="setting_input" type="text" ng-model="color" ng-change="redraw()" placeholder="{{defaultColor}}"/></li>
+                <li><span>Frames:</span><input class="setting_input" type="number" ng-model="frames" ng-change="redraw()" placeholder="{{defaultFrames}}"/></li>
+                <li><span>Idle:</span><input class="setting_input" type="number" ng-model="idle" ng-change="redraw()" placeholder="{{defaultIdle}}"/><span>ms</span></li>
+            </ul>
+            <h2>Object</h2>
+            <select ng-model="newObjectName">
+                <option value="circle">circle</option>
+                <option value="rectangle">rectangle</option>
+                <option value="text">text</option>
+                <option value="image">image</option>
+            </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
+            <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
+                <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObjectBgColor" ng-change="setObject()"/></li>
+                <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObjectX" ng-change="setObject()"/><span>px</span></li>
+                <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObjectY" ng-change="setObject()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObjectR" ng-change="setObject()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObjectWidth" ng-change="setObject()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObjectHeight" ng-change="setObject()"/><span>px</span></li>
+                <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObjectRotate" ng-change="setObject()"/><span>deg</span></li>
+            </ul>
+            <h2>Transition</h2>
+            <span style="display: {{selectedObject ? 'none' : 'inherit'}}">Please select an object!</span>
+            <input style="display: {{selectedObject ? 'inherit' : 'none'}}" type="submit" value="add" ng-click="addTransition()"/>
+            <ul style="display: {{transitions ? 'inherit' : 'none'}}">
+                <li ng-repeat="transition in transitions">
+                    property: <input type="text" ng-model="transition.transitionProperty" ng-change="setTransition()"/>, from: <input type="text" ng-model="transition.startValue" ng-change="setTransition()"/>, to: <input type="text" ng-model="transition.endValue" ng-change="setTransition()"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div><div id="right_panel">
+    <div id="storyboard" class="ui_window">
+        <div class="title"><h1>Storyboard</h1></div>
+        <div class="content" style="background: #E1E1E1;">
+            <div class="content_inner" style="text-align: center">
+                <canvas id="canvas" ng-click="canvasMouseDown($event)"></canvas>
+            </div>
+        </div>
+    </div>
+    <div id="timeline" class="ui_window window_folded_{{folded}}" ng-controller="timeline">
+        <div class="title"><h1>Timeline</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
+        <div class="content">
+            <div class="content_inner">
+                <input type="submit" name="play" value="play/pause"/>
+                <input type="range" name="frame" value="0" min="0" max="999" step="1"/>
+                <canvas id="timeline_canvas"></canvas>
+            </div>
+        </div>
+        <p></p>
+    </div>
+</div>
+</body>
+</html>

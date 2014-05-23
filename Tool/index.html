@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="animator">
+<head>
+    <title>Animator.js Demo</title>
+    <link rel="stylesheet" href="css/demo.css">
+    <script type="text/javascript" src="js/LZWEncoder.js"></script>
+    <script type="text/javascript" src="js/NeuQuant.js"></script>
+    <script type="text/javascript" src="js/GIFEncoder.js"></script>
+    <script type="text/javascript" src="js/b64.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+    <script type="text/javascript" src="js/animator.js"></script>
+    <script type="text/javascript" src="js/animatorController.js"></script>
+</head>
+<body>
+    <div id="setting_bar" class="ui_window window_folded_{{folded}}" ng-controller="settings">
+        <div class="title"><h1>Animator</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
+        <div class="content">
+            <div class="content_inner">
+                <ul>
+                    <li><span>Width:</span><input class="setting_input" id="width_input" type="number" placeholder="150" ng-model="width"><span>px</span></li>
+                    <li><span>Height:</span><input class="setting_input" id="height_input" type="number" placeholder="150" ng-model="height"><span>px</span></li>
+                    <li><span>Number of Frames:</span><input class="setting_input" id="frame_number_input" type="number" placeholder="10" ng-model="frameNumber"></li>
+                    <li><span>Idle of Frames:</span><input class="setting_input" id="frame_idle_input" type="number" placeholder="500" ng-model="frameIdle"><span>ms</span></li>
+                </ul>
+                <hr/>
+                <ul>
+                    <li><span>Add a new element:</span></li>
+                    <li><span>Init code:</span></li>
+                    <li><span>Per Frame code:</span></li>
+                </ul>
+                <hr/>
+                <p>Elements:</p>
+                <ul>
+                    <li class="item item_folded_{{item.folded}}" ng-repeat="item in items">
+                        <p ng-click="item.folded = !item.folded">{{item.type}}</p>
+                        <ul>
+                            <li><span>Init code:</span><textarea>{{item.init}}</textarea></li>
+                            <li><span>Per frame code:</span><textarea>{{item.frame}}</textarea></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!--
+                        <h2>Code (paste here):</h2>
+                        <pre><code>var canvas, context;
+            <textarea id="var">var x = 0;</textarea>
+            function yourInitCanvas(){</code>
+            <textarea id="init_frame">context.fillStyle = "#CCC";
+            context.fillRect(0, 0, 150, 150);</textarea><code>}
+
+            function yourDrawFrame(){</code>
+            <textarea id="draw_frame">context.fillStyle = "#F00";
+            context.fillRect(x, 0, 10, 10);
+            x += 10;</textarea><code>}</code></pre>
+
+            -->
+        </div>
+    </div><div id="right_panel">
+<!--
+        <div id="git_view">
+            <div id="btns">
+                <input id="view_btn" type="submit" value="view">
+                <input id="save_btn" type="submit" value="save as gif">
+            </div>
+            <div class="content">
+                <div></div>
+                <canvas id="canvas">Sorry, your browser dosen't support the HTML5 canvas tag. Please update.</canvas>
+                <a id="image" href="#"></a>
+                <canvas id="save_canvas"></canvas>
+            </div>
+        </div>
+-->
+        <div id="storyboard" class="ui_window">
+            <div class="title"><h1>Storyboard</h1></div>
+            <div class="content">
+                <div class="content_inner">
+
+                </div>
+            </div>
+        </div>
+        <div id="timeline" class="ui_window window_folded_{{folded}}" ng-controller="timeline">
+            <div class="title"><h1>Timeline</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
+            <div class="content">
+                <div class="content_inner">
+
+                </div>
+            </div>
+            <p></p>
+        </div>
+    </div>
+</body>
+</html>
