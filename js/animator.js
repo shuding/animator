@@ -3,6 +3,7 @@
 * https://github.com/quietshu/Animator.js
 *
 * Copyright 2014 Shu Ding.
+* Email: quietshu@gmail.com
 * Under the MIT license
 *
 * Date: 2014-05-22T02:03+0800
@@ -11,6 +12,9 @@
 var canvas,
     context,
     canvasBackgroundColor = "#FFF";
+
+var mouseDeltaX, mouseDeltaY,
+    mousePressed = false;
 
 var slider,
     timelineCanvas,
@@ -28,6 +32,13 @@ var fastSin = function(inValue) {
     }
     return B * inValue - C * inValue * inValue;
 }
+
+var keyPoint = {
+    createNew: function() {
+        var k = {};
+        k.frame = 0;
+    }
+};
 
 var transition = {
     createNew: function() {
@@ -92,6 +103,8 @@ var transition = {
 var unit = {
     createNew: function(){
         var u = {};
+        u.startFrame = 0;
+        u.endFrame = 100;   // TODO: add frame range to units
         return u;
     }
 };
@@ -102,6 +115,7 @@ var geometric = {
         g.type = "geometric";
         g.transitionCnt = 0;
         g.transition = [];
+
         g.addTransition = function (t) {
             g.transition[g.transitionCnt++] = t;
         };
@@ -214,6 +228,12 @@ var geometric = {
             g[key] = value;
             return g;
         };
+
+        g.drawTransitionTimeline = function() {
+            for(var n = 0; n < g.transitionCnt; ++n) {
+                drawTimeline(g.transition[n].startFrame, g.transition[n].endFrame, n, g.transition[n].transitionFunction);
+            }
+        }
         return g;
     }
 };
@@ -227,6 +247,22 @@ var rectangle = {
         r.width = 0;
         r.height = 0;
         r.stroke = false;
+        r.propertys = [
+            "fillColor",
+            "opacity",
+            "x",
+            "y",
+            "width",
+            "height",
+            "rotate"
+        ];
+
+        for(var prop in r.propertys) {
+            var t = transition.createNew();
+            t.startFrame = r.startFrame;
+            t.endFrame = r.endFrame;
+        }
+
         r.save = function(){
             r.saveGeometric();
             r.x_ = r.x;
@@ -276,6 +312,14 @@ var circle = {
         c.x = 0;
         c.y = 0;
         c.r = 0;
+        c.propertys = [
+            "fillColor",
+            "opacity",
+            "x",
+            "y",
+            "r",
+            "rotate"
+        ];
         c.save = function(){
             c.saveGeometric();
             c.x_ = c.x;
@@ -446,18 +490,33 @@ var setMainCanvasSize = function(width, height) {
     context = canvas.getContext("2d");
 }
 
-var clearTimeLine = function(){
-    timelineCanvas = document.getElementById("timeline_canvas");
-    timelineCanvas.width = timelineCanvas.offsetWidth;
-    timelineContent = timelineCanvas.getContext("2d");
-    timelineContent.fillStyle = "#CCC";
-    timelineContent.fillRect(0, 0, timelineCanvas.width, timelineCanvas.height);
-    drawTimeLine(slider.value / 1000. * timelineCanvas.width + 5);
+var clearTimeline = function(){
+    timelineContext.fillStyle = "#EEE";
+    timelineContext.fillRect(0, 0, timelineCanvas.width, timelineCanvas.height);
 }
 
-var drawTimeLine = function(x){
-    timelineContent.fillStyle = "#333";
-    timelineContent.fillRect(x + 1, 0, 1, timelineCanvas.height);
+var drawTimeline = function(l, r, y, f){
+    timelineContext.fillStyle = "red";
+    timelineContext.strokeStyle = "red";
+    timelineContext.lineWidth = 0.2;
+    l = l * 1. / controller.frameCnt * timelineCanvas.width;
+    r = r * 1. / controller.frameCnt * timelineCanvas.width;
+
+    switch (f) {
+        case "ease-in-out-sin":
+            timelineContext.beginPath();
+            var p = y * 20 + 20;
+            for(var i = l; i < r; i += 2){
+                timelineContext.moveTo(i, p);
+                p = -fastSin((Math.min(i + 2, r) - l) * 3.141592654 / (r - l) - 1.570796327) * 10. + y * 20. + 10.;
+                timelineContext.lineTo(Math.min(i + 2, r), p);
+                timelineContext.stroke();
+            }
+            timelineContext.closePath();
+            break;
+    }
+
+    //timelineContent.fillRect(lPos, y * 20. + 20., rPos - lPos, 2);
 }
 
 window.onload = function(){
@@ -472,7 +531,12 @@ window.onload = function(){
 
     var lastValue = 0;
     slider = document.getElementsByName("frame")[0];
-    clearTimeLine();
+
+    timelineCanvas = document.getElementById("timeline_canvas");
+    timelineCanvas.width = window.innerWidth - 263;
+    timelineCanvas.height = 200;
+    timelineContext = timelineCanvas.getContext("2d");
+    clearTimeline();
 
     slider.onmousemove = function(){
         if(this.value != lastValue){
@@ -483,6 +547,11 @@ window.onload = function(){
     }
     document.getElementsByName("play")[0].onclick = function(){
         controller.play();
+    }
+
+    document.onmouseup = function() {
+        mousePressed = false;
+        canvas.style.cursor = "default";
     }
 }
 
@@ -497,7 +566,7 @@ var resize = function(){
     var settingInputs = document.getElementsByClassName("setting_input");
     for(var i = 0; i < settingInputs.length; ++i){
         var leftPos = settingInputs[i].offsetLeft;
-        settingInputs[i].style.marginLeft = (100 - leftPos) + "px";
+        settingInputs[i].style.marginLeft = (90 - leftPos) + "px";
     }
 
     var right_panel = document.getElementById("right_panel");
@@ -621,8 +690,13 @@ var main = function($scope) {
         if($scope.selectedObject)
             $scope.selectedObject.selected = false;
         $scope.selectedObject = controller.getObjectAt(x, y);
+        clearTimeline();
         if($scope.selectedObject){
+            mousePressed = true;
+            mouseDeltaX = $event.offsetX - $scope.selectedObject.x;
+            mouseDeltaY = $event.offsetY - $scope.selectedObject.y;
             $scope.selectedObject.selected = true;
+            $scope.selectedObject.drawTransitionTimeline();
             $scope.transitions = $scope.selectedObject.transition;
             $scope.nowObjectBgColor = $scope.selectedObject.fillColor;
             $scope.nowObjectX = $scope.selectedObject.x;
@@ -643,6 +717,15 @@ var main = function($scope) {
             $scope.nowObjectRotate = "";
         }
         controller.redraw();
+    }
+
+    $scope.canvasDrag = function($event) {
+        if(mousePressed){
+            canvas.style.cursor = "all-scroll";
+            $scope.nowObjectX = $scope.selectedObject.x = $event.offsetX - mouseDeltaX;
+            $scope.nowObjectY = $scope.selectedObject.y = $event.offsetY - mouseDeltaY;
+            controller.redraw();
+        }
     }
 
     $scope.setObject = function(){

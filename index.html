@@ -28,13 +28,13 @@
                 <option value="image">image</option>
             </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
             <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
-                <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObjectBgColor" ng-change="setObject()"/></li>
-                <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObjectX" ng-change="setObject()"/><span>px</span></li>
-                <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObjectY" ng-change="setObject()"/><span>px</span></li>
-                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObjectR" ng-change="setObject()"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObjectWidth" ng-change="setObject()"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObjectHeight" ng-change="setObject()"/><span>px</span></li>
-                <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObjectRotate" ng-change="setObject()"/><span>deg</span></li>
+                <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObjectBgColor" ng-change="setObject()"/><input class="keypoint" type="checkbox"/></li>
+                <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObjectX" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
+                <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObjectY" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
+                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObjectR" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObjectWidth" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObjectHeight" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
+                <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObjectRotate" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>deg</span></li>
             </ul>
             <h2>Transition</h2>
             <span style="display: {{selectedObject ? 'none' : 'inherit'}}">Please select an object!</span>
@@ -51,7 +51,7 @@
         <div class="title"><h1>Storyboard</h1></div>
         <div class="content" style="background: #E1E1E1;">
             <div class="content_inner" style="text-align: center">
-                <canvas id="canvas" ng-click="canvasMouseDown($event)"></canvas>
+                <canvas id="canvas" ng-mousedown="canvasMouseDown($event)" ng-mousemove="canvasDrag($event)"></canvas>
             </div>
         </div>
     </div>
@@ -59,8 +59,10 @@
         <div class="title"><h1>Timeline</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
         <div class="content">
             <div class="content_inner">
-                <input type="submit" name="play" value="play/pause"/>
-                <input type="range" name="frame" value="0" min="0" max="999" step="1"/>
+                <div id="animationControl">
+                    <input type="submit" name="play" value="play/pause"/>
+                    <input type="range" name="frame" value="0" min="0" max="999" step="1"/>
+                </div>
                 <canvas id="timeline_canvas"></canvas>
             </div>
         </div>

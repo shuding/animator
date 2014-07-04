@@ -45,16 +45,27 @@ input[type="range"] {
     width: 100%;
     display: block;
     -webkit-appearance: none;
-    background: #999;
-    height: 2px;
+    background: #DDD;
+    height: 23px;
+    border-bottom: 1px solid #777;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 12px;
     height: 20px;
-    background: #BBB;
-    box-shadow: 0 0 0 1px #888;
+    border-radius: 3px;
+    background: #777;
+}
+
+input[type="range"]::-webkit-slider-thumb:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 1px;
+    margin-left: 5px;
+    height: 170px;
+    background: #777;
 }
 
 textarea {
@@ -150,7 +161,6 @@ code, textarea {
 
 #timeline_canvas {
     width: 100%;
-    margin-top: 10px;
 }
 
 .ui_window {
@@ -204,6 +214,48 @@ code, textarea {
 #timeline {
     height: 250px;
     margin-left: -1px;
+}
+
+#animationControl {
+    position: absolute;
+    width: 100%;
+}
+
+.content_inner {
+  position: relative;
+}
+
+.keypoint {
+  position: absolute;
+  margin-left: -45px;
+  height: 20px;
+  width: 20px;
+  border: none;
+  border-radius: 10px;
+  -webkit-appearance: none;
+  margin-top: 8px;
+}
+
+.keypoint:after {
+  content: "+";
+  display: block;
+  text-align: center;
+  width: 20px;
+  line-height: 18px;
+  font-size: 20px;
+  color: #999;
+}
+
+.keypoint:checked:after {
+  color: #fff;
+}
+
+.keypoint:not(:checked):after {
+  color: #999;
+}
+
+.keypoint:checked {
+  background-color: #999;
 }
 
 #storyboard {
