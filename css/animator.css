@@ -8,7 +8,7 @@
 
 body {
     position: absolute;
-    width: 100%;
+    width: 200%;
     height: 100%;
     overflow: hidden;
 }
@@ -45,8 +45,12 @@ input[type="range"] {
     width: 100%;
     display: block;
     -webkit-appearance: none;
-    background: #DDD;
-    height: 23px;
+    background: #000;
+    margin-top: 10px;
+    height: 1px;
+}
+
+#timeline input[type="range"] {
     border-bottom: 1px solid #777;
 }
 
@@ -58,7 +62,7 @@ input[type="range"]::-webkit-slider-thumb {
     background: #777;
 }
 
-input[type="range"]::-webkit-slider-thumb:after {
+#timeline input[type="range"]::-webkit-slider-thumb:after {
     content: "";
     display: block;
     position: absolute;
@@ -157,6 +161,7 @@ code, textarea {
 
 #canvas {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.36);
+    -webkit-transform-origin: center top;
 }
 
 #timeline_canvas {
@@ -209,6 +214,15 @@ code, textarea {
     transition: width .3s ease;
     margin: 0;
     padding: 0;
+}
+
+#canvas_control {
+  height: 100%;
+  width: 240px;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
 }
 
 #timeline {

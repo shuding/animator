@@ -17,6 +17,7 @@ var mouseDeltaX, mouseDeltaY,
     mousePressed = false;
 
 var slider,
+    frameInfo,
     timelineCanvas,
     timelineContext;
 
@@ -641,6 +642,7 @@ var controller = {
             return;
         }
         ++controller.nowFrame;
+        frameInfo.innerHTML = controller.nowFrame + "/" + controller.frameCnt;
     },
     drawFrameWithNumber: function(n){
         if(n < controller.frameCnt){
@@ -649,6 +651,7 @@ var controller = {
                 controller.layer[i].drawFrameWithNumber(
                     (n - controller.layer[i].startFrame)
                 );
+            frameInfo.innerHTML = (n + 1) + "/" + controller.frameCnt;
         }
         controller.nowFrame = (+n) + 1;
     },
@@ -718,6 +721,7 @@ var drawTimeline = function(t){
 window.onload = function(){
     canvas = document.getElementById("canvas");
     context = canvas.getContext("2d");
+    frameInfo = document.getElementById("frame_number");
 
     setMainCanvasSize(250, 250);
 
@@ -725,11 +729,15 @@ window.onload = function(){
     controller.idle = 16;
     controller.drawFrameWithNumber(0);
 
-    var lastValue = 0;
+    var lastValue = 0,
+        lastScaleValue = 100;
     slider = document.getElementsByName("frame")[0];
+    var scale_rate = document.getElementById("scale_rate");
+
+    frameInfo.innerHTML = controller.nowFrame + "/" + controller.frameCnt;
 
     timelineCanvas = document.getElementById("timeline_canvas");
-    timelineCanvas.width = window.innerWidth - 263;
+    timelineCanvas.width = window.innerWidth - 500;
     timelineCanvas.height = 200;
     timelineContext = timelineCanvas.getContext("2d");
     clearTimeline();
@@ -743,6 +751,14 @@ window.onload = function(){
     }
     document.getElementsByName("play")[0].onclick = function(){
         controller.play();
+    }
+    document.getElementsByName("scale")[0].onmousemove = function(){
+        if(this.value != lastScaleValue){
+            var s = 1. * this.value / 100;
+            canvas.style["-webkit-transform"] = "scale(" + s + ',' + s + ')';
+            lastScaleValue = this.value;
+            scale_rate.innerHTML = lastScaleValue + '%';
+        }
     }
 
     document.onmouseup = function() {
@@ -765,7 +781,7 @@ var resize = function(){
     }
 
     var right_panel = document.getElementById("right_panel");
-    right_panel.style.width = scrWidth - 242 + "px";
+    right_panel.style.width = scrWidth - 242 * 2 + "px";
 
     var storyboard = document.getElementById("storyboard");
     storyboard.style.height = scrHeight - 252 + "px";
@@ -993,7 +1009,9 @@ var settings_fold = function(){
 
     var scrWidth  = window.innerWidth;
     var right_panel = document.getElementById("right_panel");
-    right_panel.style.width = scrWidth - [242, 22][+this.folded] + "px";
+    right_panel.style.width = scrWidth - [242 * 2, 44][+this.folded] + "px";
+    var canvas_control = document.getElementById("canvas_control");
+    canvas_control.className = ["ui_window", "ui_window window_folded_true"][+this.folded];
 }
 
 var timeline_fold = function(){
