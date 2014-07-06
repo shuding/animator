@@ -705,28 +705,14 @@ var clearTimeline = function(){
     timelineContext.fillRect(0, 0, timelineCanvas.width, timelineCanvas.height);
 }
 
-var drawTimeline = function(l, r, y, f){
-    timelineContext.fillStyle = "red";
-    timelineContext.strokeStyle = "red";
-    timelineContext.lineWidth = 0.2;
-    l = l * 1. / controller.frameCnt * timelineCanvas.width;
-    r = r * 1. / controller.frameCnt * timelineCanvas.width;
-
-    switch (f) {
-        case "ease-in-out-sin":
-            timelineContext.beginPath();
-            var p = y * 20 + 20;
-            for(var i = l; i < r; i += 2){
-                timelineContext.moveTo(i, p);
-                p = -fastSin((Math.min(i + 2, r) - l) * 3.141592654 / (r - l) - 1.570796327) * 10. + y * 20. + 10.;
-                timelineContext.lineTo(Math.min(i + 2, r), p);
-                timelineContext.stroke();
-            }
-            timelineContext.closePath();
-            break;
+var drawTimeline = function(t){
+    clearTimeline();
+    timelineContext.fillStyle = "#F00";
+    for(var i in t.propertyKeyFrames) {
+        if(t.propertyKeyFrames[i])
+            for(var j = 0; j < t.propertyKeyFrames[i].length; ++j)
+                timelineContext.fillRect(1. * t.propertyKeyFrames[i][j] / (t.endFrame - t.startFrame) * timelineCanvas.width - 6, 50, 6, 50);
     }
-
-    //timelineContent.fillRect(lPos, y * 20. + 20., rPos - lPos, 2);
 }
 
 window.onload = function(){
@@ -927,6 +913,8 @@ var main = function($scope) {
                 $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
             }
 
+            drawTimeline($scope.selectedObject);
+
             $scope.selectedObject.watchChange(function() {
                 if($scope.selectedObject) {
                     for(var prop in $scope.selectedObject.propertys) {
@@ -995,6 +983,7 @@ var main = function($scope) {
 
     $scope.toggleKeyFrame = function(prop) {
         $scope.selectedObject.toggleKeyFrame(prop, controller.nowFrame);
+        drawTimeline($scope.selectedObject);
     }
 }
 
