@@ -33,13 +33,6 @@ var fastSin = function(inValue) {
     return B * inValue - C * inValue * inValue;
 }
 
-var keyPoint = {
-    createNew: function() {
-        var k = {};
-        k.frame = 0;
-    }
-};
-
 var transition = {
     createNew: function() {
         var t = {};
@@ -49,12 +42,22 @@ var transition = {
         t.endValue = 0;
         t.transitionFunction = "linear";
         t.transitionProperty = "";
+        t.normalize = function() {
+            t.startValue = +t.startValue;
+            t.endValue = +t.endValue;
+        };
         t.inTransition = function(n){
             if(n < t.startFrame || n >= t.endFrame)
                 return false;
             return true;
         };
+        t.inTransitionTotally = function(n) {
+            if(n <= t.startFrame || n >= t.endFrame - 1)
+                return false;
+            return true;
+        };
         t.getValueWithNumber = function(n){
+            t.normalize();
             if(n < t.startFrame)
                 n = t.startFrame;
             else if(n >= t.endFrame)
@@ -62,26 +65,28 @@ var transition = {
             var v;
             switch (t.transitionFunction) {
                 case "linear":
-                    v = 1. * (n - t.startFrame) / (t.endFrame - t.startFrame) * (t.endValue - t.startValue)
+                    v = (n - t.startFrame) * 1. / (t.endFrame - t.startFrame - 1)
+                        * (t.endValue - t.startValue)
                         + t.startValue;
                     break;
                 case "ease-in-sin":
-                    v = (fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame) - 1.570796327) + 1)
+                    v = (fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1) - 1.570796327) + 1)
                         * (t.endValue - t.startValue)
                         + t.startValue;
                     break;
                 case "ease-out-sin":
-                    v = fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame))
+                    v = fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1))
                         * (t.endValue - t.startValue)
                         + t.startValue;
                     break;
                 case "ease-in-out-sin":
-                    v = (fastSin(3.141592654 * (n - t.startFrame) / (t.endFrame - t.startFrame) - 1.570796327) * .5 + .5)
+                    v = (fastSin(3.141592654 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1) - 1.570796327) * .5 + .5)
                         * (t.endValue - t.startValue)
                         + t.startValue;
                     break;
                 default:
-                    v = 1. * (n - t.startFrame) / (t.endFrame - t.startFrame) * (t.endValue - t.startValue)
+                    v = 1. * (n - t.startFrame) / (t.endFrame - t.startFrame - 1)
+                        * (t.endValue - t.startValue)
                         + t.startValue;
             };
             return v;
@@ -105,6 +110,89 @@ var unit = {
         var u = {};
         u.startFrame = 0;
         u.endFrame = 100;   // TODO: add frame range to units
+        u.transitionCnt = 0;
+        u.transition = [];
+        u.propertys = [];
+        u.propertyKeypoints = [];
+        u.watchFunction = undefined;
+
+        u.initTransition = function() {
+            for(var prop in u.propertys) {
+                var t = transition.createNew().set({
+                    "startFrame": u.startFrame,
+                    "endFrame": u.endFrame,
+                    "startValue": u[u.propertys[prop]],
+                    "endValue": u[u.propertys[prop]],
+                    "transitionProperty": u.propertys[prop]
+                });
+                u.addTransition(t);
+            }
+
+            return u;
+        };
+        u.watchChange = function(callback) {
+            u.watchFunction = callback;
+
+            return u;
+        };
+        u.unwatchChange = function() {
+            if(u.watchFunction)
+                u.watchFunction = undefined;
+
+            return u;
+        };
+        u.addTransition = function(t) {
+            u.transition[u.transitionCnt++] = t;
+            var arr = u.propertyKeypoints[t.transitionProperty] || [];
+            u.propertyKeypoints[t.transitionProperty] = arr.concat([t.startFrame, t.endFrame]);
+
+            return u;
+        };
+        u.removeTransition = function(t) {
+            var index = u.transition.indexOf(t);
+            if(index > -1) {
+                u.transition.splice(index, 1);
+                index = u.propertyKeypoints[t.transitionProperty].indexOf(t.startFrame);
+                u.propertyKeypoints[t.transitionProperty].splice(index, 1);
+                index = u.propertyKeypoints[t.transitionProperty].indexOf(t.endFrame);
+                u.propertyKeypoints[t.transitionProperty].splice(index, 1);
+                u.transitionCnt--;
+                delete t;
+            }
+
+            return u;
+        };
+        u.transitionFrame = function(n) {
+            for(var i = 0; i < u.transitionCnt; ++i){
+                if(u.transition[i].inTransition(n))
+                    u[u.transition[i].transitionProperty] = u.transition[i].getValueWithNumber(n);
+            }
+            if(u.watchFunction)
+                u.watchFunction();
+
+            return u;
+        };
+        u.hasFrame = function(f) {
+            for(var prop in u.propertys) {
+                if(u.propertyKeypoints[u.propertys[prop]].indexOf(f) <= -1)
+                    return false;
+            }
+            return true;
+        };
+        u.addKeyFrame = function(f) {
+            for(var i = 0; i < u.transitionCnt; ++i) {
+                if(u.transition[i].inTransitionTotally(n)) {
+                    //u.transition
+                }
+                    u[u.transition[i].transitionProperty] = u.transition[i].getValueWithNumber(n);
+            }
+        };
+        u.removeFrame = function(f) {
+
+        };
+        u.toggleKeyFrame = function(f) {
+            return u;
+        };
         return u;
     }
 };
@@ -113,20 +201,8 @@ var geometric = {
     createNew: function () {
         var g = unit.createNew();
         g.type = "geometric";
-        g.transitionCnt = 0;
-        g.transition = [];
 
-        g.addTransition = function (t) {
-            g.transition[g.transitionCnt++] = t;
-        };
-        g.transitionFrame = function(n) {
-            for(var i = 0; i < g.transitionCnt; ++i){
-                if(g.transition[i].inTransition(n))
-                    g[g.transition[i].transitionProperty] = g.transition[i].getValueWithNumber(n);
-            }
-        };
-
-        g.opacity = 0;
+        g.opacity = 1;
         g.fillColor = "#FFF";
         g.strokeColor = "#FFF";
         g.lineWidth = 0;
@@ -242,10 +318,10 @@ var rectangle = {
     createNew: function(){
         var r = geometric.createNew();
         r.type = "rectangle";
-        r.x = 0;
-        r.y = 0;
-        r.width = 0;
-        r.height = 0;
+        r.x = 50;
+        r.y = 50;
+        r.width = 50;
+        r.height = 50;
         r.stroke = false;
         r.propertys = [
             "fillColor",
@@ -256,12 +332,7 @@ var rectangle = {
             "height",
             "rotate"
         ];
-
-        for(var prop in r.propertys) {
-            var t = transition.createNew();
-            t.startFrame = r.startFrame;
-            t.endFrame = r.endFrame;
-        }
+        r.initTransition();
 
         r.save = function(){
             r.saveGeometric();
@@ -309,9 +380,9 @@ var circle = {
     createNew: function(){
         var c = geometric.createNew();
         c.type = "circle";
-        c.x = 0;
-        c.y = 0;
-        c.r = 0;
+        c.x = 50;
+        c.y = 50;
+        c.r = 50;
         c.propertys = [
             "fillColor",
             "opacity",
@@ -320,6 +391,8 @@ var circle = {
             "r",
             "rotate"
         ];
+        c.initTransition();
+
         c.save = function(){
             c.saveGeometric();
             c.x_ = c.x;
@@ -555,7 +628,6 @@ window.onload = function(){
     }
 }
 
-
 var load = function(){
     resize();
 }
@@ -566,7 +638,7 @@ var resize = function(){
     var settingInputs = document.getElementsByClassName("setting_input");
     for(var i = 0; i < settingInputs.length; ++i){
         var leftPos = settingInputs[i].offsetLeft;
-        settingInputs[i].style.marginLeft = (90 - leftPos) + "px";
+        settingInputs[i].style.marginLeft = (80 - leftPos) + "px";
     }
 
     var right_panel = document.getElementById("right_panel");
@@ -636,15 +708,22 @@ var main = function($scope) {
         if($scope.selectedObject)
             $scope.selectedObject.selected = false;
         o.selected = true;
+        o.watchChange(function() {      // use closure
+            if($scope.selectedObject) {
+                for(var prop in $scope.selectedObject.propertys) {
+                    var propName = $scope.selectedObject.propertys[prop];
+                    $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                }
+                $scope.$apply();
+            }
+        });
         $scope.selectedObject = o;
         $scope.transitions = $scope.selectedObject.transition;
-        $scope.nowObjectBgColor = $scope.selectedObject.fillColor;
-        $scope.nowObjectX = $scope.selectedObject.x;
-        $scope.nowObjectY = $scope.selectedObject.y;
-        $scope.nowObjectR = $scope.selectedObject.r;
-        $scope.nowObjectWidth = $scope.selectedObject.width;
-        $scope.nowObjectHeight = $scope.selectedObject.height;
-        $scope.nowObjectRotate = $scope.selectedObject.rotate;
+
+        for(var prop in $scope.selectedObject.propertys) {
+            var propName = $scope.selectedObject.propertys[prop];
+            $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+        }
 
         var l = layer.createNew();
         l.startFrame = 0;
@@ -687,8 +766,10 @@ var main = function($scope) {
     $scope.canvasMouseDown = function($event){
         var x = $event.offsetX,
             y = $event.offsetY;
-        if($scope.selectedObject)
+        if($scope.selectedObject) {
             $scope.selectedObject.selected = false;
+            $scope.selectedObject.unwatchChange();
+        }
         $scope.selectedObject = controller.getObjectAt(x, y);
         clearTimeline();
         if($scope.selectedObject){
@@ -698,23 +779,31 @@ var main = function($scope) {
             $scope.selectedObject.selected = true;
             $scope.selectedObject.drawTransitionTimeline();
             $scope.transitions = $scope.selectedObject.transition;
-            $scope.nowObjectBgColor = $scope.selectedObject.fillColor;
-            $scope.nowObjectX = $scope.selectedObject.x;
-            $scope.nowObjectY = $scope.selectedObject.y;
-            $scope.nowObjectR = $scope.selectedObject.r;
-            $scope.nowObjectWidth = $scope.selectedObject.width;
-            $scope.nowObjectHeight = $scope.selectedObject.height;
-            $scope.nowObjectRotate = $scope.selectedObject.rotate;
+
+            for(var prop in $scope.selectedObject.propertys) {
+                var propName = $scope.selectedObject.propertys[prop];
+                $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+            }
+
+            $scope.selectedObject.watchChange(function() {
+                if($scope.selectedObject) {
+                    for(var prop in $scope.selectedObject.propertys) {
+                        var propName = $scope.selectedObject.propertys[prop];
+                        $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                    }
+                    $scope.$apply();
+                }
+            });
         }
         else{
             $scope.transitions = [];
-            $scope.nowObjectBgColor = "";
-            $scope.nowObjectX = "";
-            $scope.nowObjectY = "";
-            $scope.nowObjectR = "";
-            $scope.nowObjectWidth = "";
-            $scope.nowObjectHeight = "";
-            $scope.nowObjectRotate = "";
+            $scope.nowObject_fillColor = "";
+            $scope.nowObject_x = "";
+            $scope.nowObject_y = "";
+            $scope.nowObject_r = "";
+            $scope.nowObject_width = "";
+            $scope.nowObject_height = "";
+            $scope.nowObject_rotate = "";
         }
         controller.redraw();
     }
@@ -722,8 +811,8 @@ var main = function($scope) {
     $scope.canvasDrag = function($event) {
         if(mousePressed){
             canvas.style.cursor = "all-scroll";
-            $scope.nowObjectX = $scope.selectedObject.x = $event.offsetX - mouseDeltaX;
-            $scope.nowObjectY = $scope.selectedObject.y = $event.offsetY - mouseDeltaY;
+            $scope.nowObject_x = $scope.selectedObject.x = $event.offsetX - mouseDeltaX;
+            $scope.nowObject_y = $scope.selectedObject.y = $event.offsetY - mouseDeltaY;
             controller.redraw();
         }
     }
@@ -733,13 +822,10 @@ var main = function($scope) {
             clearTimeout($scope.timer);
         $scope.timer = setTimeout(function(){
             if($scope.selectedObject){
-                $scope.selectedObject.fillColor = $scope.nowObjectBgColor;
-                $scope.selectedObject.x = $scope.nowObjectX;
-                $scope.selectedObject.y = $scope.nowObjectY;
-                $scope.selectedObject.r = $scope.nowObjectR;
-                $scope.selectedObject.width = $scope.nowObjectWidth;
-                $scope.selectedObject.height = $scope.nowObjectHeight;
-                $scope.selectedObject.rotate = $scope.nowObjectRotate;
+                for(var prop in $scope.selectedObject.propertys) {
+                    var propName = $scope.selectedObject.propertys[prop];
+                    $scope.selectedObject[propName] = $scope["nowObject_" + propName];
+                }
             }
             controller.redraw();
             $scope.timer = false;
@@ -756,6 +842,10 @@ var main = function($scope) {
             controller.redraw();
             $scope.timer = false;
         }, 300);
+    }
+
+    $scope.toggleKeyFrame = function() {
+        $scope.selectedObject.toggleKeyFrame($scope.nowFrame);
     }
 }
 

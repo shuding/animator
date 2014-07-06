@@ -28,13 +28,13 @@
                 <option value="image">image</option>
             </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
             <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
-                <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObjectBgColor" ng-change="setObject()"/><input class="keypoint" type="checkbox"/></li>
-                <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObjectX" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
-                <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObjectY" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
-                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObjectR" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObjectWidth" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObjectHeight" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>px</span></li>
-                <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObjectRotate" ng-change="setObject()"/><input class="keypoint" type="checkbox"/><span>deg</span></li>
+                <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/></li>
+                <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObject_rotate" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-click="toggleKeyFrame()"/><span>deg</span></li>
             </ul>
             <h2>Transition</h2>
             <span style="display: {{selectedObject ? 'none' : 'inherit'}}">Please select an object!</span>
@@ -61,7 +61,8 @@
             <div class="content_inner">
                 <div id="animationControl">
                     <input type="submit" name="play" value="play/pause"/>
-                    <input type="range" name="frame" value="0" min="0" max="999" step="1"/>
+                    <span id="frame_number"></span>
+                    <input type="range" name="frame" value="0" min="0" max="1000" step="1"/>
                 </div>
                 <canvas id="timeline_canvas"></canvas>
             </div>
