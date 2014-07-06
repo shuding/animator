@@ -138,6 +138,7 @@ var transition = {
         t.transitionFunction = "linear";
         t.transitionProperty = "";
         t.isColor = false;
+        t.isInitTransition = false;
         t.normalize = function(v) {
             var ret;
             if(color.isColorVarible(v)) {
@@ -201,7 +202,7 @@ var unit = {
         u.transitionCnt = 0;
         u.transition = [];
         u.propertys = [];
-        u.propertyKeypoints = [];
+        u.propertyKeyFrames = [];
         u.watchFunction = undefined;
 
         u.initTransition = function() {
@@ -211,7 +212,8 @@ var unit = {
                     "endFrame": u.endFrame,
                     "startValue": u[u.propertys[prop]],
                     "endValue": u[u.propertys[prop]],
-                    "transitionProperty": u.propertys[prop]
+                    "transitionProperty": u.propertys[prop],
+                    "isInitTransition": true
                 });
                 u.addTransition(t);
             }
@@ -231,54 +233,101 @@ var unit = {
         };
         u.addTransition = function(t) {
             u.transition[u.transitionCnt++] = t;
-            var arr = u.propertyKeypoints[t.transitionProperty] || [];
-            u.propertyKeypoints[t.transitionProperty] = arr.concat([t.startFrame, t.endFrame]);
 
             return u;
         };
-        u.removeTransition = function(t) {
-            var index = u.transition.indexOf(t);
-            if(index > -1) {
-                u.transition.splice(index, 1);
-                index = u.propertyKeypoints[t.transitionProperty].indexOf(t.startFrame);
-                u.propertyKeypoints[t.transitionProperty].splice(index, 1);
-                index = u.propertyKeypoints[t.transitionProperty].indexOf(t.endFrame);
-                u.propertyKeypoints[t.transitionProperty].splice(index, 1);
-                u.transitionCnt--;
-                delete t;
-            }
+        u.removeTransition = function(i) {
+            u.transition.splice(i, 1);
+            u.transitionCnt--;
 
             return u;
         };
         u.transitionFrame = function(n) {
             for(var i = 0; i < u.transitionCnt; ++i){
-                if(u.transition[i].inTransition(n))
-                    u[u.transition[i].transitionProperty] = u.transition[i].getValueWithNumber(n);
+                if(u.transition[i].inTransition(n)) {
+                    if(!u.transition[i].isInitTransition)
+                        u[u.transition[i].transitionProperty] = u.transition[i].getValueWithNumber(n);
+                    else
+                        u.transition[i].startValue = u.transition[i].endValue = u[u.transition[i].transitionProperty];
+                }
             }
             if(u.watchFunction)
                 u.watchFunction();
 
             return u;
         };
-        u.hasFrame = function(f) {
-            for(var prop in u.propertys) {
-                if(u.propertyKeypoints[u.propertys[prop]].indexOf(f) <= -1)
-                    return false;
-            }
+        u.hasKeyFrame = function(prop, f) {
+            if(u.propertyKeyFrames[prop] == undefined || u.propertyKeyFrames[prop].indexOf(f) <= -1)
+                return false;
             return true;
         };
-        u.addKeyFrame = function(f) {
-            for(var i = 0; i < u.transitionCnt; ++i) {
-                if(u.transition[i].inTransitionTotally(n)) {
-                    //u.transition
+        u.addKeyFrame = function(prop, f) {
+            for(var i = 0; i < u.transitionCnt; ++i)
+                if(u.transition[i].transitionProperty == prop && u.transition[i].inTransition(f)) {
+                    if(u.transition[i].isInitTransition)
+                        u.transition[i].isInitTransition = false;
+                    u.propertyKeyFrames[prop] = [u.transition[i].startFrame, u.transition[i].endFrame];
+                    if(u.propertyKeyFrames[prop].indexOf(f) <= -1) {
+                        u.propertyKeyFrames[prop].push(f);
+                        var vf = u.transition[i].getValueWithNumber(f);
+                        var t = transition.createNew().set({
+                            "startFrame": f,
+                            "endFrame": u.transition[i].endFrame,
+                            "startValue": vf,
+                            "endValue":u.transition[i].endValue,
+                            "transitionProperty": u.transition[i].transitionProperty
+                        });
+                        u.transition[i].set({
+                            "endFrame": f,
+                            "endValue": vf
+                        });
+                        u.addTransition(t);
+                    }
+                    return u;
                 }
-                    u[u.transition[i].transitionProperty] = u.transition[i].getValueWithNumber(n);
+            return u;
+        };
+        u.removeKeyFrame = function(prop, f) {
+            var t = transition.createNew().set("transitionProperty", prop);
+            var r1 = -1, r2 = -1;
+            for(var i = 0; i < u.transitionCnt; ++i)
+                if(u.transition[i].transitionProperty == prop) {
+                    if(u.transition[i].startFrame == f) {
+                        t.set({
+                            "endFrame": u.transition[i].endFrame,
+                            "endValue": u.transition[i].endValue
+                        });
+                        r1 = i;
+                    }
+                    if(u.transition[i].endFrame == f) {
+                        t.set({
+                            "startFrame": u.transition[i].startFrame,
+                            "startValue": u.transition[i].startValue
+                        });
+                        r2 = i;
+                    }
+                }
+            u.propertyKeyFrames[prop].splice(u.propertyKeyFrames[prop].indexOf(f), 1);
+            u.removeTransition(r1).removeTransition(r2).addTransition(t);
+            return u;
+        };
+        u.setKeyFrame = function(prop, f, v) {
+            for(var i = 0; i < u.transitionCnt; ++i)
+                if(u.transition[i].transitionProperty == prop) {
+                    if(u.transition[i].startFrame == f)
+                        u.transition[i].startValue = v;
+                    if(u.transition[i].endFrame == f)
+                        u.transition[i].endValue = v;
+                }
+            return u;
+        };
+        u.toggleKeyFrame = function(prop, f) {
+            if(u.hasKeyFrame(prop, f)) {
+                u.removeKeyFrame(prop, f);
             }
-        };
-        u.removeFrame = function(f) {
+            else
+                u.addKeyFrame(prop, f);
 
-        };
-        u.toggleKeyFrame = function(f) {
             return u;
         };
         return u;
@@ -582,7 +631,7 @@ var controller = {
             clearCanvas();
             for(var i = 0; i < controller.layerCnt; ++i)
                 controller.layer[i].drawFrameWithNumber(
-                    (n - controller.layer[i].startFrame) * controller.idle / controller.layer[i].idle
+                    (n - controller.layer[i].startFrame)
                 );
             slider.value = Math.floor(1000. * n / controller.frameCnt);
         }
@@ -598,7 +647,7 @@ var controller = {
             clearCanvas();
             for(var i = 0; i < controller.layerCnt; ++i)
                 controller.layer[i].drawFrameWithNumber(
-                    (n - controller.layer[i].startFrame) * controller.idle / controller.layer[i].idle
+                    (n - controller.layer[i].startFrame)
                 );
         }
         controller.nowFrame = (+n) + 1;
@@ -801,8 +850,11 @@ var main = function($scope) {
                 for(var prop in $scope.selectedObject.propertys) {
                     var propName = $scope.selectedObject.propertys[prop];
                     $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
                 }
-                $scope.$apply();
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
             }
         });
         $scope.selectedObject = o;
@@ -811,6 +863,7 @@ var main = function($scope) {
         for(var prop in $scope.selectedObject.propertys) {
             var propName = $scope.selectedObject.propertys[prop];
             $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+            $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
         }
 
         var l = layer.createNew();
@@ -871,6 +924,7 @@ var main = function($scope) {
             for(var prop in $scope.selectedObject.propertys) {
                 var propName = $scope.selectedObject.propertys[prop];
                 $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
             }
 
             $scope.selectedObject.watchChange(function() {
@@ -878,8 +932,11 @@ var main = function($scope) {
                     for(var prop in $scope.selectedObject.propertys) {
                         var propName = $scope.selectedObject.propertys[prop];
                         $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                        $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
                     }
-                    $scope.$apply();
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
                 }
             });
         }
@@ -912,7 +969,11 @@ var main = function($scope) {
             if($scope.selectedObject){
                 for(var prop in $scope.selectedObject.propertys) {
                     var propName = $scope.selectedObject.propertys[prop];
-                    $scope.selectedObject[propName] = $scope["nowObject_" + propName];
+                    if($scope.selectedObject.hasKeyFrame(propName, controller.nowFrame))
+                        $scope.selectedObject.setKeyFrame(propName, controller.nowFrame, $scope["nowObject_" + propName]);
+                    else
+                        $scope.selectedObject[propName] = $scope["nowObject_" + propName];
+                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
                 }
             }
             controller.redraw();
@@ -932,8 +993,8 @@ var main = function($scope) {
         }, 300);
     }
 
-    $scope.toggleKeyFrame = function() {
-        $scope.selectedObject.toggleKeyFrame($scope.nowFrame);
+    $scope.toggleKeyFrame = function(prop) {
+        $scope.selectedObject.toggleKeyFrame(prop, controller.nowFrame);
     }
 }
 
