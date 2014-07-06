@@ -33,6 +33,101 @@ var fastSin = function(inValue) {
     return B * inValue - C * inValue * inValue;
 }
 
+var color = {
+    // via http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
+    colors : {"aliceblue":"#f0f8ff","antiquewhite":"#faebd7","aqua":"#00ffff","aquamarine":"#7fffd4","azure":"#f0ffff",
+        "beige":"#f5f5dc","bisque":"#ffe4c4","black":"#000000","blanchedalmond":"#ffebcd","blue":"#0000ff","blueviolet":"#8a2be2","brown":"#a52a2a","burlywood":"#deb887",
+        "cadetblue":"#5f9ea0","chartreuse":"#7fff00","chocolate":"#d2691e","coral":"#ff7f50","cornflowerblue":"#6495ed","cornsilk":"#fff8dc","crimson":"#dc143c","cyan":"#00ffff",
+        "darkblue":"#00008b","darkcyan":"#008b8b","darkgoldenrod":"#b8860b","darkgray":"#a9a9a9","darkgreen":"#006400","darkkhaki":"#bdb76b","darkmagenta":"#8b008b","darkolivegreen":"#556b2f",
+        "darkorange":"#ff8c00","darkorchid":"#9932cc","darkred":"#8b0000","darksalmon":"#e9967a","darkseagreen":"#8fbc8f","darkslateblue":"#483d8b","darkslategray":"#2f4f4f","darkturquoise":"#00ced1",
+        "darkviolet":"#9400d3","deeppink":"#ff1493","deepskyblue":"#00bfff","dimgray":"#696969","dodgerblue":"#1e90ff",
+        "firebrick":"#b22222","floralwhite":"#fffaf0","forestgreen":"#228b22","fuchsia":"#ff00ff",
+        "gainsboro":"#dcdcdc","ghostwhite":"#f8f8ff","gold":"#ffd700","goldenrod":"#daa520","gray":"#808080","green":"#008000","greenyellow":"#adff2f",
+        "honeydew":"#f0fff0","hotpink":"#ff69b4",
+        "indianred ":"#cd5c5c","indigo":"#4b0082","ivory":"#fffff0","khaki":"#f0e68c",
+        "lavender":"#e6e6fa","lavenderblush":"#fff0f5","lawngreen":"#7cfc00","lemonchiffon":"#fffacd","lightblue":"#add8e6","lightcoral":"#f08080","lightcyan":"#e0ffff","lightgoldenrodyellow":"#fafad2",
+        "lightgrey":"#d3d3d3","lightgreen":"#90ee90","lightpink":"#ffb6c1","lightsalmon":"#ffa07a","lightseagreen":"#20b2aa","lightskyblue":"#87cefa","lightslategray":"#778899","lightsteelblue":"#b0c4de",
+        "lightyellow":"#ffffe0","lime":"#00ff00","limegreen":"#32cd32","linen":"#faf0e6",
+        "magenta":"#ff00ff","maroon":"#800000","mediumaquamarine":"#66cdaa","mediumblue":"#0000cd","mediumorchid":"#ba55d3","mediumpurple":"#9370d8","mediumseagreen":"#3cb371","mediumslateblue":"#7b68ee",
+        "mediumspringgreen":"#00fa9a","mediumturquoise":"#48d1cc","mediumvioletred":"#c71585","midnightblue":"#191970","mintcream":"#f5fffa","mistyrose":"#ffe4e1","moccasin":"#ffe4b5",
+        "navajowhite":"#ffdead","navy":"#000080",
+        "oldlace":"#fdf5e6","olive":"#808000","olivedrab":"#6b8e23","orange":"#ffa500","orangered":"#ff4500","orchid":"#da70d6",
+        "palegoldenrod":"#eee8aa","palegreen":"#98fb98","paleturquoise":"#afeeee","palevioletred":"#d87093","papayawhip":"#ffefd5","peachpuff":"#ffdab9","peru":"#cd853f","pink":"#ffc0cb","plum":"#dda0dd","powderblue":"#b0e0e6","purple":"#800080",
+        "red":"#ff0000","rosybrown":"#bc8f8f","royalblue":"#4169e1",
+        "saddlebrown":"#8b4513","salmon":"#fa8072","sandybrown":"#f4a460","seagreen":"#2e8b57","seashell":"#fff5ee","sienna":"#a0522d","silver":"#c0c0c0","skyblue":"#87ceeb","slateblue":"#6a5acd","slategray":"#708090","snow":"#fffafa","springgreen":"#00ff7f","steelblue":"#4682b4",
+        "tan":"#d2b48c","teal":"#008080","thistle":"#d8bfd8","tomato":"#ff6347","turquoise":"#40e0d0",
+        "violet":"#ee82ee",
+        "wheat":"#f5deb3","white":"#ffffff","whitesmoke":"#f5f5f5",
+        "yellow":"#ffff00","yellowgreen":"#9acd32"
+    },
+    colorToHex: function(c) {
+        var co = c.toString().toLowerCase();
+        if (typeof color.colors[co.toLowerCase()] != 'undefined')
+            return color.colors[co.toLowerCase()];
+        else if(co[0] == 'r') {
+            co = co.replace(/\s+/g, '');
+            // via http://haacked.com/archive/2009/12/29/convert-rgb-to-hex.aspx/
+            var digits = /(.*?)rgb\((\d+),(\d+),(\d+)\)/.exec(co);
+            var red = parseInt(digits[2]);
+            var green = parseInt(digits[3]);
+            var blue = parseInt(digits[4]);
+
+            // bug fixed by Shu Ding
+            red = (red >=16 ? '' : '0') + red.toString(16);
+            green = (green >=16 ? '' : '0') + green.toString(16);
+            blue = (blue >=16 ? '' : '0') + blue.toString(16);
+            return digits[1] + '#' + red + green + blue;
+        }
+        else if(co[0] == '#' && co.length == 4) {
+            return '#' + co[1] + co[1] + co[2] + co[2] + co[3] + co[3];
+        }
+        else if(co[0] == '#' && co.length == 7)
+            return co;
+
+        return "#000000";
+    },
+    colorToRGB: function(c) {
+        var hex = color.colorToHex(c).slice(1);
+        return [parseInt(hex.slice(0,2), 16), parseInt(hex.slice(2,4), 16), parseInt(hex.slice(4,6), 16)];
+    },
+    isColorVarible: function(v) {
+        return  typeof v === "string" && (v[0] == '#' || v.toLowerCase()[0] == 'r' || color.colors[v.toLowerCase()]);
+    }
+};
+
+var easing = {
+    calc: function(func, n, startFrame, endFrame, startValue, endValue) {
+        var v;
+        switch (func) {
+            case "linear":
+                v = (n - startFrame) * 1. / (endFrame - startFrame - 1)
+                    * (endValue - startValue)
+                    + startValue;
+                break;
+            case "ease-in-sin":
+                v = (fastSin(1.570796327 * (n - startFrame) / (endFrame - startFrame - 1) - 1.570796327) + 1)
+                    * (endValue - startValue)
+                    + startValue;
+                break;
+            case "ease-out-sin":
+                v = fastSin(1.570796327 * (n - startFrame) / (endFrame - startFrame - 1))
+                    * (endValue - startValue)
+                    + startValue;
+                break;
+            case "ease-in-out-sin":
+                v = (fastSin(3.141592654 * (n - startFrame) / (endFrame - startFrame - 1) - 1.570796327) * .5 + .5)
+                    * (endValue - startValue)
+                    + startValue;
+                break;
+            default:
+                v = 1. * (n - startFrame) / (endFrame - startFrame - 1)
+                    * (endValue - startValue)
+                    + startValue;
+        };
+        return v;
+    }
+};
+
 var transition = {
     createNew: function() {
         var t = {};
@@ -42,9 +137,19 @@ var transition = {
         t.endValue = 0;
         t.transitionFunction = "linear";
         t.transitionProperty = "";
-        t.normalize = function() {
-            t.startValue = +t.startValue;
-            t.endValue = +t.endValue;
+        t.isColor = false;
+        t.normalize = function(v) {
+            var ret;
+            if(color.isColorVarible(v)) {
+                ret = color.colorToRGB(v);
+                t.isColor = true;
+            }
+            else {
+                ret = +v;
+                t.isColor = false;
+            }
+
+            return ret;
         };
         t.inTransition = function(n){
             if(n < t.startFrame || n >= t.endFrame)
@@ -57,38 +162,21 @@ var transition = {
             return true;
         };
         t.getValueWithNumber = function(n){
-            t.normalize();
+            var startValue = t.normalize(t.startValue),
+                endValue = t.normalize(t.endValue);
             if(n < t.startFrame)
                 n = t.startFrame;
             else if(n >= t.endFrame)
                 n = t.endFrame;
             var v;
-            switch (t.transitionFunction) {
-                case "linear":
-                    v = (n - t.startFrame) * 1. / (t.endFrame - t.startFrame - 1)
-                        * (t.endValue - t.startValue)
-                        + t.startValue;
-                    break;
-                case "ease-in-sin":
-                    v = (fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1) - 1.570796327) + 1)
-                        * (t.endValue - t.startValue)
-                        + t.startValue;
-                    break;
-                case "ease-out-sin":
-                    v = fastSin(1.570796327 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1))
-                        * (t.endValue - t.startValue)
-                        + t.startValue;
-                    break;
-                case "ease-in-out-sin":
-                    v = (fastSin(3.141592654 * (n - t.startFrame) / (t.endFrame - t.startFrame - 1) - 1.570796327) * .5 + .5)
-                        * (t.endValue - t.startValue)
-                        + t.startValue;
-                    break;
-                default:
-                    v = 1. * (n - t.startFrame) / (t.endFrame - t.startFrame - 1)
-                        * (t.endValue - t.startValue)
-                        + t.startValue;
-            };
+            if(t.isColor) {
+                v = [];
+                for(var i = 0; i < 3; ++i)
+                    v[i] = Math.floor(easing.calc(t.transitionFunction, n, t.startFrame, t.endFrame, startValue[i], endValue[i]));
+                v = color.colorToHex("rgb(" + v[0] + ',' + v[1] + ',' + v[2] + ')');
+            }
+            else v = easing.calc(t.transitionFunction, n, t.startFrame, t.endFrame, startValue, endValue);
+
             return v;
         };
         t.set = function(key, value) {
@@ -203,8 +291,8 @@ var geometric = {
         g.type = "geometric";
 
         g.opacity = 1;
-        g.fillColor = "#FFF";
-        g.strokeColor = "#FFF";
+        g.fillColor = "#000000";
+        g.strokeColor = "#ffffff";
         g.lineWidth = 0;
         g.rotate = 0;
         g.selected = false;
@@ -686,7 +774,7 @@ var main = function($scope) {
                         "x": 50,
                         "y": 50,
                         "r": 50,
-                        "fillColor": "#000",
+                        "fillColor": "#000000",
                         "opacity": 1,
                         "rotate": 0
                     });
@@ -698,7 +786,7 @@ var main = function($scope) {
                         "y": 0,
                         "width": 100,
                         "height": 100,
-                        "fillColor": "#000",
+                        "fillColor": "#000000",
                         "opacity": 1,
                         "rotate": 0
                     });
