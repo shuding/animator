@@ -1,5 +1,5 @@
 /*
-* Animator.js Library v0.5
+* Animator.js Library v0.52
 * https://github.com/quietshu/Animator.js
 *
 * Copyright 2014 Shu Ding.
