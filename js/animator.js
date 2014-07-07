@@ -711,10 +711,16 @@ var clearTimeline = function(){
 var drawTimeline = function(t){
     clearTimeline();
     timelineContext.fillStyle = "#F00";
+    timelineContext.fillRect(0, 80, timelineCanvas.width, 1);
     for(var i in t.propertyKeyFrames) {
         if(t.propertyKeyFrames[i])
-            for(var j = 0; j < t.propertyKeyFrames[i].length; ++j)
-                timelineContext.fillRect(1. * t.propertyKeyFrames[i][j] / (t.endFrame - t.startFrame) * timelineCanvas.width - 6, 50, 6, 50);
+            for(var j = 0; j < t.propertyKeyFrames[i].length; ++j) {
+                var x = 1. * t.propertyKeyFrames[i][j] / (t.endFrame - t.startFrame) * (timelineCanvas.width - 12) + 6;
+                timelineContext.beginPath();
+                timelineContext.arc(x, 80, 5, 0, 6.283185307, false);
+                timelineContext.fill();
+                timelineContext.closePath();
+            }
     }
 }
 
