@@ -32,9 +32,9 @@
                 <li><span>Opacity:</span><input class="setting_input" type="text" ng-model="nowObject_opacity" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_opacity_key" ng-click="toggleKeyFrame('opacity')"/></li>
                 <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_x_key" ng-click="toggleKeyFrame('x')"/><span>px</span></li>
                 <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_y_key" ng-click="toggleKeyFrame('y')"/><span>px</span></li>
-                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject('r')"/><input class="keypoint" type="checkbox" ng-model="nowObject_r_key" ng-click="toggleKeyFrame()"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject('width')"/><input class="keypoint" type="checkbox" ng-model="nowObject_width_key" ng-click="toggleKeyFrame()"/><span>px</span></li>
-                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject('height')"/><input class="keypoint" type="checkbox" ng-model="nowObject_height_key" ng-click="toggleKeyFrame()"/><span>px</span></li>
+                <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}"><span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_r_key" ng-click="toggleKeyFrame('r')"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_width_key" ng-click="toggleKeyFrame('width')"/><span>px</span></li>
+                <li style="display: {{selectedObject.type != 'circle' ? 'inherit' : 'none'}}"><span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_height_key" ng-click="toggleKeyFrame('height')"/><span>px</span></li>
                 <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObject_rotate" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_rotate_key" ng-click="toggleKeyFrame('rotate')"/><span>deg</span></li>
             </ul>
             <h2>Transition</h2>
@@ -63,7 +63,7 @@
                 <div id="animationControl">
                     <input type="submit" name="play" value="play/pause"/>
                     <span id="frame_number"></span>
-                    <input type="range" name="frame" value="0" min="0" max="1000" step="1"/>
+                    <input type="range" name="frame" value="0" min="0" max="9999" step="1"/>
                 </div>
                 <canvas id="timeline_canvas"></canvas>
             </div>

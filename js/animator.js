@@ -21,6 +21,8 @@ var slider,
     timelineCanvas,
     timelineContext;
 
+var timelineNowObject = undefined;
+
 var fastSin = function(inValue) {
     // See for graph and equations
     // https://www.desmos.com/calculator/8nkxlrmp7a
@@ -258,8 +260,9 @@ var unit = {
             return u;
         };
         u.hasKeyFrame = function(prop, f) {
-            if(u.propertyKeyFrames[prop] == undefined || u.propertyKeyFrames[prop].indexOf(f) <= -1)
+            if(u.propertyKeyFrames[prop] == undefined || u.propertyKeyFrames[prop].indexOf(f) <= -1) {
                 return false;
+            }
             return true;
         };
         u.addKeyFrame = function(prop, f) {
@@ -267,7 +270,12 @@ var unit = {
                 if(u.transition[i].transitionProperty == prop && u.transition[i].inTransition(f)) {
                     if(u.transition[i].isInitTransition)
                         u.transition[i].isInitTransition = false;
-                    u.propertyKeyFrames[prop] = [u.transition[i].startFrame, u.transition[i].endFrame];
+                    if(!u.propertyKeyFrames[prop])
+                        u.propertyKeyFrames[prop] = [];
+                    if(u.propertyKeyFrames[prop].indexOf(u.transition[i].startFrame) <= -1)
+                        u.propertyKeyFrames[prop] = u.propertyKeyFrames[prop].concat(u.transition[i].startFrame);
+                    if(u.propertyKeyFrames[prop].indexOf(u.transition[i].endFrame - 1) <= -1)
+                        u.propertyKeyFrames[prop] = u.propertyKeyFrames[prop].concat(u.transition[i].endFrame - 1);
                     if(u.propertyKeyFrames[prop].indexOf(f) <= -1) {
                         u.propertyKeyFrames[prop].push(f);
                         var vf = u.transition[i].getValueWithNumber(f);
@@ -284,6 +292,7 @@ var unit = {
                         });
                         u.addTransition(t);
                     }
+                    u.propertyKeyFrames[prop].sort();
                     return u;
                 }
             return u;
@@ -317,7 +326,7 @@ var unit = {
                 if(u.transition[i].transitionProperty == prop) {
                     if(u.transition[i].startFrame == f)
                         u.transition[i].startValue = v;
-                    if(u.transition[i].endFrame == f)
+                    if(u.transition[i].endFrame == f || u.transition[i].endFrame == f + 1)
                         u.transition[i].endValue = v;
                 }
             return u;
@@ -622,6 +631,7 @@ var controller = {
     idle: 0,
     timeInterval: undefined,
     layer: [],
+    export: false,
     playing: false,
     addLayer: function(l){
         controller.layer[controller.layerCnt++] = l;
@@ -634,7 +644,7 @@ var controller = {
                 controller.layer[i].drawFrameWithNumber(
                     (n - controller.layer[i].startFrame)
                 );
-            slider.value = Math.floor(1000. * n / controller.frameCnt);
+            slider.value = Math.floor(10000. * n / controller.frameCnt);
         }
         else {
             clearInterval(controller.timeInterval);
@@ -652,6 +662,7 @@ var controller = {
                     (n - controller.layer[i].startFrame)
                 );
             frameInfo.innerHTML = (n + 1) + "/" + controller.frameCnt;
+            drawTimelineTransition();
         }
         controller.nowFrame = (+n) + 1;
     },
@@ -710,17 +721,56 @@ var clearTimeline = function(){
 
 var drawTimeline = function(t){
     clearTimeline();
-    timelineContext.fillStyle = "#F00";
-    timelineContext.fillRect(0, 80, timelineCanvas.width, 1);
+    timelineNowObject = undefined;
+    var h = 80;
     for(var i in t.propertyKeyFrames) {
-        if(t.propertyKeyFrames[i])
+        if(t.propertyKeyFrames[i]) {
+            timelineNowObject = t;
+            timelineContext.fillStyle = "#888";
+            timelineContext.fillRect(0, h, timelineCanvas.width, 1);
             for(var j = 0; j < t.propertyKeyFrames[i].length; ++j) {
-                var x = 1. * t.propertyKeyFrames[i][j] / (t.endFrame - t.startFrame) * (timelineCanvas.width - 12) + 6;
+                var x = 1. * t.propertyKeyFrames[i][j] / (t.endFrame - t.startFrame - 1) * (timelineCanvas.width - 12) + 6;
                 timelineContext.beginPath();
-                timelineContext.arc(x, 80, 5, 0, 6.283185307, false);
+                timelineContext.arc(x, h, 5, 0, 6.283185307, false);
                 timelineContext.fill();
                 timelineContext.closePath();
             }
+            h += 20;
+        }
+    }
+}
+
+var drawTimelineTransition = function() {
+    if(timelineNowObject) {
+        clearTimeline();
+        var h = 80;
+        for(var i in timelineNowObject.propertyKeyFrames) {
+            if(timelineNowObject.propertyKeyFrames[i]) {
+                timelineContext.fillStyle = "#888";
+                timelineContext.fillRect(0, h, timelineCanvas.width, 1);
+                for(var j = 0; j < timelineNowObject.propertyKeyFrames[i].length; ++j) {
+                    if(controller.nowFrame - 1 == timelineNowObject.propertyKeyFrames[i][j])
+                        timelineContext.fillStyle = "#F00";
+                    else {
+                        if(j && controller.nowFrame - 1 < timelineNowObject.propertyKeyFrames[i][j]
+                             && controller.nowFrame - 1 > timelineNowObject.propertyKeyFrames[i][j - 1]) {
+                            timelineContext.fillStyle = "#F00";
+                            timelineContext.fillRect(timelineNowObject.propertyKeyFrames[i][j - 1]
+                                / (timelineNowObject.endFrame - timelineNowObject.startFrame - 1) * (timelineCanvas.width - 12) + 10, h,
+                                (timelineNowObject.propertyKeyFrames[i][j] - timelineNowObject.propertyKeyFrames[i][j - 1])
+                                    / (timelineNowObject.endFrame - timelineNowObject.startFrame - 1) * (timelineCanvas.width - 12) - 10, 1);
+                        }
+                        timelineContext.fillStyle = "#888";
+                    }
+                    var x = 1. * timelineNowObject.propertyKeyFrames[i][j] / (timelineNowObject.endFrame - timelineNowObject.startFrame - 1) * (timelineCanvas.width - 12) + 6;
+                    timelineContext.beginPath();
+                    timelineContext.arc(x, h, 5, 0, 6.283185307, false);
+                    timelineContext.fill();
+                    timelineContext.closePath();
+                }
+                h += 20;
+            }
+        }
     }
 }
 
@@ -750,7 +800,7 @@ window.onload = function(){
 
     slider.onmousemove = function(){
         if(this.value != lastValue){
-            var frameNow = this.value / 1000. * controller.frameCnt;
+            var frameNow = this.value / 10000. * controller.frameCnt;
             controller.drawFrameWithNumber(Math.floor(frameNow));
             lastValue = this.value;
         }
@@ -858,7 +908,7 @@ var main = function($scope) {
                 for(var prop in $scope.selectedObject.propertys) {
                     var propName = $scope.selectedObject.propertys[prop];
                     $scope["nowObject_" + propName] = $scope.selectedObject[propName];
-                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
+                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
                 }
                 if(!$scope.$$phase) {
                     $scope.$apply();
@@ -871,7 +921,7 @@ var main = function($scope) {
         for(var prop in $scope.selectedObject.propertys) {
             var propName = $scope.selectedObject.propertys[prop];
             $scope["nowObject_" + propName] = $scope.selectedObject[propName];
-            $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
+            $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
         }
 
         var l = layer.createNew();
@@ -932,7 +982,7 @@ var main = function($scope) {
             for(var prop in $scope.selectedObject.propertys) {
                 var propName = $scope.selectedObject.propertys[prop];
                 $scope["nowObject_" + propName] = $scope.selectedObject[propName];
-                $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
+                $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
             }
 
             drawTimeline($scope.selectedObject);
@@ -942,7 +992,7 @@ var main = function($scope) {
                     for(var prop in $scope.selectedObject.propertys) {
                         var propName = $scope.selectedObject.propertys[prop];
                         $scope["nowObject_" + propName] = $scope.selectedObject[propName];
-                        $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
+                        $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
                     }
                     if(!$scope.$$phase) {
                         $scope.$apply();
@@ -979,11 +1029,12 @@ var main = function($scope) {
             if($scope.selectedObject){
                 for(var prop in $scope.selectedObject.propertys) {
                     var propName = $scope.selectedObject.propertys[prop];
-                    if($scope.selectedObject.hasKeyFrame(propName, controller.nowFrame))
-                        $scope.selectedObject.setKeyFrame(propName, controller.nowFrame, $scope["nowObject_" + propName]);
+                    if($scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1)) {
+                        $scope.selectedObject.setKeyFrame(propName, controller.nowFrame - 1, $scope["nowObject_" + propName]);
+                    }
                     else
                         $scope.selectedObject[propName] = $scope["nowObject_" + propName];
-                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame);
+                    $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
                 }
             }
             controller.redraw();
@@ -1004,7 +1055,7 @@ var main = function($scope) {
     }
 
     $scope.toggleKeyFrame = function(prop) {
-        $scope.selectedObject.toggleKeyFrame(prop, controller.nowFrame);
+        $scope.selectedObject.toggleKeyFrame(prop, controller.nowFrame - 1);
         drawTimeline($scope.selectedObject);
     }
 }
