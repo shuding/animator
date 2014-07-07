@@ -645,8 +645,11 @@ var controller = {
                     (n - controller.layer[i].startFrame)
                 );
             slider.value = Math.floor(10000. * n / controller.frameCnt);
+            drawTimelineTransition();
         }
         else {
+            slider.value = Math.floor(10000. * n / controller.frameCnt);
+            drawTimelineTransition();
             clearInterval(controller.timeInterval);
             controller.playing = false;
             return;
