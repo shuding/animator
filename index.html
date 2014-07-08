@@ -80,9 +80,9 @@
       <input type="range" name="scale" value="100" min="0" max="200" step="1"/>
       <span id="scale_rate">100%</span>
       <h2>Level</h2>
-      <ul class="unit-list" style="display: {{objects ? 'inherit' : 'none'}}">
-        <li class="unit-selected-{{o.selected}}" ng-repeat="o in objects">
-          {{o.name()}}
+      <ul class="unit-list" style="display: {{objects.length ? 'inherit' : 'none'}}" ondrop="drop(event)" ondragenter="dragEnter(event)" ondragover="dragOver(event)">
+        <li id="unit-{{$index}}" class="unit-selected-{{objects[$index].selected}}" ng-repeat="o in objects" draggable data-unit-no="{{$index}}" ng-mousedown="selectUnit($index)">
+          {{objects[$index].name()}}<span class="delete-unit" ng-click="removeObject($event)">×</span>
         </li>
       </ul>
     </div>

@@ -311,11 +311,14 @@ code, textarea {
 .item_folded_false {
     height: 260px;
 }
+
 .unit-list {
   background: #EEE;
   padding: 5px;
 }
+
 .unit-list li {
+  position: relative;
   display: block;
   height: 22px;
   line-height: 22px;
@@ -324,7 +327,32 @@ code, textarea {
   box-shadow: 0 0 0 1px #888;
   margin-top: 1px;
 }
+
 .unit-list li.unit-selected-true {
   background-color: #CCC;
 
+}
+
+.delete-unit {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  height: 22px;
+  width: 22px;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.delete-unit:hover {
+  background-color: #888;
+  color: #fff;
+  cursor: pointer;
+}
+
+.transition {
+  -webkit-transition: height .3s ease;
+  -moz-transition: height .3s ease;
+  transition: height .3s ease;
+  overflow: hidden;
 }

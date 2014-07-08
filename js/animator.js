@@ -22,7 +22,9 @@ var slider,
     timelineContext;
 
 var timelineNowObject = undefined,
-    unitCnt = 0;
+    unitCnt = 0,
+    unitListPosition = 0,
+    unitDragNo = 0;
 
 var fastSin = function(inValue) {
     // See for graph and equations
@@ -35,6 +37,18 @@ var fastSin = function(inValue) {
         return B * inValue + C * inValue * inValue;
     }
     return B * inValue - C * inValue * inValue;
+}
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = 0, len = this.length; i < len; i++) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
 }
 
 var color = {
@@ -649,8 +663,24 @@ var controller = {
     layer: [],
     export: false,
     playing: false,
+    watchLayerSwap: function(){},
     addLayer: function(l){
         controller.layer[controller.layerCnt++] = l;
+    },
+    removeLayer: function(no) {
+        no = controller.layerCnt - no - 1;
+        controller.layer.splice(no, 1);
+        --controller.layerCnt;
+    },
+    swapLayer: function(a, b) {
+        if(a != b) {
+            controller.watchLayerSwap && controller.watchLayerSwap(a, b);
+            a = controller.layerCnt - a - 1;
+            b = controller.layerCnt - b - 1;
+            var tmp = controller.layer[a];
+            controller.layer[a] = controller.layer[b];
+            controller.layer[b] = tmp;
+        }
     },
     drawFrame: function(){
         var n = controller.nowFrame;
@@ -869,6 +899,43 @@ var resize = function(){
     }
 }
 
+var drop = function(event) {
+    event.preventDefault();
+    event.srcElement.style.opacity = "1";
+    //var no = event.dataTransfer.getData("no");
+}
+
+var dragEnter = function(event) {
+
+}
+
+var dragOver = function(event) {
+    event.preventDefault();
+    var pos = Math.floor((event.clientY - unitListPosition - 5) / 23);
+    if(pos != unitDragNo && pos < controller.layerCnt && pos > -1) {
+
+        controller.swapLayer(unitDragNo, pos);
+        controller.redraw();
+
+        unitDragNo = pos;
+    }
+}
+
+var dragStart = function(event) {
+    unitListPosition = document.getElementsByClassName("unit-list")[0].getBoundingClientRect().top;
+    unitDragNo = this.getAttribute("data-unit-no");
+    //event.srcElement.style.opacity = "0.5";
+    event.dataTransfer.setData("element", this.innerHTML);
+}
+
+var dragRerange = function() {
+    return function($scope, element) {
+        var e = element[0];
+        e.draggable = true;
+        e.ondragstart = dragStart;
+    }
+}
+
 var main = function($scope) {
     $scope.width = 250;
     $scope.height = 250;
@@ -891,6 +958,12 @@ var main = function($scope) {
     $scope.btn_click = settings_fold;
 
     $scope.newObjectName = "circle";
+
+    controller.watchLayerSwap = function(a, b) {
+        var tmp = $scope.objects[a];
+        $scope.objects[a] = $scope.objects[b];
+        $scope.objects[b] = tmp;
+    }
 
     $scope.addObject = function(){
         var o;
@@ -958,6 +1031,14 @@ var main = function($scope) {
         controller.redraw();
     };
 
+    $scope.removeObject = function(event) {
+        //var e = event.srcElement.parentNode;
+
+        $scope.objects.splice(this.$index, 1);
+        controller.removeLayer(this.$index);
+        controller.redraw();
+    };
+
     $scope.addTransition = function(){
         if(!$scope.selectedObject)
             return;
@@ -984,6 +1065,38 @@ var main = function($scope) {
             controller.redraw();
             $scope.timer = false;
         }, 300);
+    }
+
+    $scope.selectUnit = function(index) {
+        if($scope.selectedObject != $scope.objects[index]) {
+            $scope.selectedObject.selected = false;
+            $scope.selectedObject.unwatchChange();
+            $scope.selectedObject = $scope.objects[index];
+            $scope.selectedObject.selected = true;
+            $scope.selectedObject.drawTransitionTimeline();
+            $scope.transitions = $scope.selectedObject.transition;
+
+            for(var prop in $scope.selectedObject.propertys) {
+                var propName = $scope.selectedObject.propertys[prop];
+                $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
+            }
+
+            drawTimeline($scope.selectedObject);
+            $scope.selectedObject.watchChange(function() {
+                if($scope.selectedObject) {
+                    for(var prop in $scope.selectedObject.propertys) {
+                        var propName = $scope.selectedObject.propertys[prop];
+                        $scope["nowObject_" + propName] = $scope.selectedObject[propName];
+                        $scope["nowObject_" + propName + "_key"] = $scope.selectedObject.hasKeyFrame(propName, controller.nowFrame - 1);
+                    }
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            });
+            controller.redraw();
+        }
     }
 
     $scope.canvasMouseDown = function($event){
@@ -1121,4 +1234,5 @@ var timeline = function($scope) {
 var app = angular.module("animator", []);
 app.run(load)
     .controller("timeline", timeline)
-    .controller("main", main);
+    .controller("main", main)
+    .directive("draggable", dragRerange);
