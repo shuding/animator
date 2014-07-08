@@ -114,6 +114,9 @@ var color = {
 };
 
 var easing = {
+    functions: [
+        "linear", "ease-in-sin", "ease-out-sin", "ease-in-out-sin"
+    ],
     calc: function(func, n, startFrame, endFrame, startValue, endValue) {
         var v;
         switch (func) {
@@ -274,6 +277,23 @@ var unit = {
                 u.watchFunction();
 
             return u;
+        };
+        u.findTransitionStartWith = function(s, prop) {
+            for(var i = 0; i < u.transitionCnt; ++i){
+                if(u.transition[i].startFrame == s && u.transition[i].transitionProperty == prop) {
+                    return u.transition[i];
+                }
+            }
+            return undefined;
+        };
+        u.changeTransitionFunction = function(tr, tf) {
+            for(var i = 0; i < u.transitionCnt; ++i){
+                if(u.transition[i] == tr) {
+                    u.transition[i].transitionFunction = tf;
+                    return u;
+                }
+            }
+            return undefined;
         };
         u.hasKeyFrame = function(prop, f) {
             if(u.propertyKeyFrames[prop] == undefined || u.propertyKeyFrames[prop].indexOf(f) <= -1) {
@@ -663,6 +683,7 @@ var controller = {
     layer: [],
     export: false,
     playing: false,
+    setNowTransition: function(){},
     watchLayerSwap: function(){},
     addLayer: function(l){
         controller.layer[controller.layerCnt++] = l;
@@ -793,6 +814,7 @@ var drawTimelineTransition = function() {
     if(timelineNowObject) {
         clearTimeline();
         var h = 80;
+        var nowTransitions = [];
         for(var i in timelineNowObject.propertyKeyFrames) {
             if(timelineNowObject.propertyKeyFrames[i]) {
                 timelineContext.fillStyle = "#888";
@@ -808,6 +830,7 @@ var drawTimelineTransition = function() {
                                 / (timelineNowObject.endFrame - timelineNowObject.startFrame - 1) * (timelineCanvas.width - 12) + 10, h,
                                 (timelineNowObject.propertyKeyFrames[i][j] - timelineNowObject.propertyKeyFrames[i][j - 1])
                                     / (timelineNowObject.endFrame - timelineNowObject.startFrame - 1) * (timelineCanvas.width - 12) - 10, 1);
+                            nowTransitions.push(timelineNowObject.findTransitionStartWith(timelineNowObject.propertyKeyFrames[i][j - 1], i));
                         }
                         timelineContext.fillStyle = "#888";
                     }
@@ -820,6 +843,7 @@ var drawTimelineTransition = function() {
                 h += 20;
             }
         }
+        controller.setNowTransition(nowTransitions);
     }
 }
 
@@ -958,12 +982,21 @@ var main = function($scope) {
     $scope.btn_click = settings_fold;
 
     $scope.newObjectName = "circle";
+    $scope.transitionFunctions = easing.functions;
+
+    controller.setNowTransition = function(trs) {
+        $scope.transitions = trs;
+    };
 
     controller.watchLayerSwap = function(a, b) {
         var tmp = $scope.objects[a];
         $scope.objects[a] = $scope.objects[b];
         $scope.objects[b] = tmp;
-    }
+    };
+
+    $scope.changeTransitionFunction = function(tr, tf){
+        $scope.selectedObject.changeTransitionFunction(tr, tf);
+    };
 
     $scope.addObject = function(){
         var o;
@@ -1013,7 +1046,6 @@ var main = function($scope) {
             }
         });
         $scope.selectedObject = o;
-        $scope.transitions = $scope.selectedObject.transition;
 
         for(var prop in $scope.selectedObject.propertys) {
             var propName = $scope.selectedObject.propertys[prop];
@@ -1037,6 +1069,8 @@ var main = function($scope) {
         $scope.objects.splice(this.$index, 1);
         controller.removeLayer(this.$index);
         controller.redraw();
+        timelineNowObject = undefined;
+        clearTimeline();
     };
 
     $scope.addTransition = function(){
@@ -1074,7 +1108,6 @@ var main = function($scope) {
             $scope.selectedObject = $scope.objects[index];
             $scope.selectedObject.selected = true;
             $scope.selectedObject.drawTransitionTimeline();
-            $scope.transitions = $scope.selectedObject.transition;
 
             for(var prop in $scope.selectedObject.propertys) {
                 var propName = $scope.selectedObject.propertys[prop];
@@ -1105,6 +1138,8 @@ var main = function($scope) {
         if($scope.selectedObject) {
             $scope.selectedObject.selected = false;
             $scope.selectedObject.unwatchChange();
+            clearTimeline();
+            timelineNowObject = undefined;
         }
         $scope.selectedObject = controller.getObjectAt(x, y);
         clearTimeline();
@@ -1114,7 +1149,6 @@ var main = function($scope) {
             mouseDeltaY = $event.offsetY - $scope.selectedObject.y;
             $scope.selectedObject.selected = true;
             $scope.selectedObject.drawTransitionTimeline();
-            $scope.transitions = $scope.selectedObject.transition;
 
             for(var prop in $scope.selectedObject.propertys) {
                 var propName = $scope.selectedObject.propertys[prop];
@@ -1184,9 +1218,7 @@ var main = function($scope) {
         if($scope.timer)
             clearTimeout($scope.timer);
         $scope.timer = setTimeout(function(){
-            if($scope.selectedObject){
-                $scope.selectedObject.transition = $scope.transitions;
-            }
+            // TODO
             controller.redraw();
             $scope.timer = false;
         }, 300);

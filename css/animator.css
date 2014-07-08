@@ -356,3 +356,14 @@ code, textarea {
   transition: height .3s ease;
   overflow: hidden;
 }
+
+.transition-list {
+  display: block;
+  background: #EEE;
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.block {
+  display: block;
+}
