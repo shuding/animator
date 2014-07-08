@@ -45,20 +45,15 @@ input[type="range"] {
     width: 100%;
     display: block;
     -webkit-appearance: none;
-    background: #000;
+    box-shadow: 0 0 0 1px;
     margin-top: 10px;
-    height: 1px;
-}
-
-#timeline input[type="range"] {
-    border-bottom: 1px solid #777;
+    height: 20px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 12px;
     height: 20px;
-    border-radius: 3px;
     background: #777;
 }
 
@@ -315,4 +310,21 @@ code, textarea {
 
 .item_folded_false {
     height: 260px;
+}
+.unit-list {
+  background: #EEE;
+  padding: 5px;
+}
+.unit-list li {
+  display: block;
+  height: 22px;
+  line-height: 22px;
+  font-size: 14px;
+  text-indent: 5px;
+  box-shadow: 0 0 0 1px #888;
+  margin-top: 1px;
+}
+.unit-list li.unit-selected-true {
+  background-color: #CCC;
+
 }

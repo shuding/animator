@@ -21,7 +21,8 @@ var slider,
     timelineCanvas,
     timelineContext;
 
-var timelineNowObject = undefined;
+var timelineNowObject = undefined,
+    unitCnt = 0;
 
 var fastSin = function(inValue) {
     // See for graph and equations
@@ -206,6 +207,7 @@ var unit = {
         u.transition = [];
         u.propertys = [];
         u.propertyKeyFrames = [];
+        u.unitName = "noname";
         u.watchFunction = undefined;
 
         u.initTransition = function() {
@@ -340,6 +342,32 @@ var unit = {
 
             return u;
         };
+        u.move = function(f) {
+            if(u.hasKeyFrame('x', f))
+                u.setKeyFrame('x', f, u['x']);
+            if(u.hasKeyFrame('y', f))
+                u.setKeyFrame('y', f, u['y']);
+
+            return u;
+        };
+        u.name = function(n) {
+            if(n) {
+                u.unitName = n;
+                return u;
+            }
+            return u.unitName;
+        };
+        u.set = function(key, value){
+            if(Object.prototype.toString.call(key) === '[object Object]') {
+                for(var k in key){
+                    if(key.hasOwnProperty(k))
+                        u[k] = key[k];
+                }
+                return u;
+            }
+            u[key] = value;
+            return u;
+        };
         return u;
     }
 };
@@ -438,18 +466,6 @@ var geometric = {
                 }
             }
             context.restore();
-        };
-
-        g.set = function(key, value){
-            if(Object.prototype.toString.call(key) === '[object Object]') {
-                for(var k in key){
-                    if(key.hasOwnProperty(k))
-                        g[k] = key[k];
-                }
-                return g;
-            }
-            g[key] = value;
-            return g;
         };
 
         g.drawTransitionTimeline = function() {
@@ -868,6 +884,7 @@ var main = function($scope) {
     $scope.timer = false;
     $scope.selectedObject = undefined;
     $scope.transitions = [];
+    $scope.objects = [];
 
     $scope.folded = false;
     $scope.window_btn = "×";
@@ -880,6 +897,7 @@ var main = function($scope) {
         switch ($scope.newObjectName) {
             case "circle":
                 o = circle.createNew()
+                    .name('circle' + (unitCnt++))
                     .set({
                         "x": 50,
                         "y": 50,
@@ -891,6 +909,7 @@ var main = function($scope) {
                 break;
             case "rectangle":
                 o = rectangle.createNew()
+                    .name('rectangle' + (unitCnt++))
                     .set({
                         "x": 0,
                         "y": 0,
@@ -903,6 +922,8 @@ var main = function($scope) {
                 break;
             default :
         }
+        $scope.objects = [o].concat($scope.objects);
+
         if($scope.selectedObject)
             $scope.selectedObject.selected = false;
         o.selected = true;
@@ -1021,6 +1042,7 @@ var main = function($scope) {
             canvas.style.cursor = "all-scroll";
             $scope.nowObject_x = $scope.selectedObject.x = $event.offsetX - mouseDeltaX;
             $scope.nowObject_y = $scope.selectedObject.y = $event.offsetY - mouseDeltaY;
+            $scope.selectedObject.move(controller.nowFrame - 1);
             controller.redraw();
         }
     }
