@@ -26,7 +26,10 @@ var timelineNowObject = undefined,
     unitListPosition = 0,
     unitDragNo = 0;
 
-var GIFEncoderLoaded = false;
+var GIFEncoderLoaded = false,
+    encoder,
+    encodeCanvas,
+    encodeContext;
 
 var fastSin = function(inValue) {
     // See for graph and equations
@@ -48,6 +51,7 @@ var loadJS = function(path, callback) {
     js.onreadystatechange = callback;
     js.onload = callback;
     document.getElementsByTagName("head")[0].appendChild(js);
+    console.log(path + ' loaded.');
 }
 
 Element.prototype.remove = function() {
@@ -556,29 +560,39 @@ var rectangle = {
             r.width = r.width_;
             r.height = r.height_;
         };
-        r.draw = function(){
-            context.save();
-            context.translate(r.x + r.width * .5, r.y + r.height * .5);
+        r.draw = function(c){
+            var ctx;
+            if(c)
+                ctx = c;
+            else
+                ctx = context;
+            ctx.save();
+            ctx.translate(r.x + r.width * .5, r.y + r.height * .5);
             if(r.rotate)
-                context.rotate(r.rotate * .017453293);
+                ctx.rotate(r.rotate * .017453293);
             //context.translate(r.x + r.width *.5, r.y + r.height *.5);
-            context.globalAlpha = r.opacity;
-            context.fillStyle = r.fillColor;
+            ctx.globalAlpha = r.opacity;
+            ctx.fillStyle = r.fillColor;
             //context.fillRect(r.x, r.y, r.width, r.height);
-            context.fillRect(-r.width *.5, -r.height *.5, r.width, r.height);
+            ctx.fillRect(-r.width *.5, -r.height *.5, r.width, r.height);
             if(r.stroke) {
-                context.strokeStyle = r.strokeColor;
-                context.lineWidth = r.lineWidth;
-                context.stroke();
+                ctx.strokeStyle = r.strokeColor;
+                ctx.lineWidth = r.lineWidth;
+                ctx.stroke();
             }
-            context.restore();
-            r.drawGeometric();
+            ctx.restore();
+            if(!c)
+                r.drawGeometric();
         };
         r.drawFunction = function(n){
             //r.save();
             r.transitionFrame(n);
             r.draw();
             //r.restore();
+        };
+        r.encodeWithFrame = function(n) {
+            r.transitionFrame(n);
+            r.draw(encodeContext);
         };
         return r;
     }
@@ -611,25 +625,31 @@ var circle = {
             c.x = c.x_;
             c.y = c.y_;
         };
-        c.draw = function(){
-            context.save();
-            context.beginPath();
-            context.globalAlpha = c.opacity;
-            context.arc(c.x, c.y, c.r, 0, 6.283185307, false);
-            context.fillStyle = c.fillColor;
-            context.fill();
-//            context.lineWidth = 5;
-//            context.strokeStyle = '#003300';
-//            context.stroke();
-            context.closePath();
-            context.restore();
-            c.drawGeometric();
+        c.draw = function(c_){
+            var ctx = c_ || context;
+            ctx.save();
+            ctx.beginPath();
+            ctx.globalAlpha = c.opacity;
+            ctx.arc(c.x, c.y, c.r, 0, 6.283185307, false);
+            ctx.fillStyle = c.fillColor;
+            ctx.fill();
+//            ctx.lineWidth = 5;
+//            ctx.strokeStyle = '#003300';
+//            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+            if(!c_)
+                c.drawGeometric();
         };
         c.drawFunction = function(n){
             //r.save();
             c.transitionFrame(n);
             c.draw();
             //r.restore();
+        };
+        c.encodeWithFrame = function(n) {
+            c.transitionFrame(n);
+            c.draw(encodeContext);
         };
         return c;
     }
@@ -661,12 +681,16 @@ var layer = {
                 clearInterval(l.timeInterval);
             ++l.nowFrame;
         };
-        l.drawFrameWithNumber = function(n){
+        l.drawFrameWithNumber = function(n) {
             l.nowFrame = n;
             if(n < 0 || n >= l.cntFrame)
                 return;
             l.drawFunction(n);
             l.nowFrame = 0;
+        };
+        l.encodeWithFrame = function(n) {
+            for(var i = 0; i < l.objectCnt; ++i)
+                l.objects[i].encodeWithFrame(n);
         };
         l.startAnimation = function(){
             l.nowFrame = 0;
@@ -696,6 +720,7 @@ var controller = {
     playing: false,
     setNowTransition: function(){},
     watchLayerSwap: function(){},
+    changeExportingPercent: function(){},
     addLayer: function(l){
         controller.layer[controller.layerCnt++] = l;
     },
@@ -763,6 +788,16 @@ var controller = {
             controller.nowFrame = 0;
         controller.playing = true;
         controller.timeInterval = setInterval(controller.drawFrame, controller.idle);
+    },
+    encode: function() {
+        for(var i = 0; i < controller.frameCnt; ++i) {
+            for(var j = 0; j < controller.layerCnt; ++j)
+                controller.layer[j].encodeWithFrame(i);
+            encoder.addFrame(encodeContext);
+            controller.changeExportingPercent(Math.floor(i * 100.0 / controller.frameCnt));
+            encodeContext.fillStyle = "#fff";
+            encodeContext.fillRect(0, 0, encodeCanvas.width, encodeCanvas.height);
+        }
     },
     redraw: function(){
         controller.drawFrameWithNumber(controller.nowFrame - 1);
@@ -995,6 +1030,9 @@ var main = function($scope) {
     $scope.newObjectName = "circle";
     $scope.transitionFunctions = easing.functions;
 
+    $scope.loading = "none";
+    $scope.loading_percent = 0;
+
     controller.setNowTransition = function(trs) {
         $scope.transitions = trs;
     };
@@ -1004,6 +1042,13 @@ var main = function($scope) {
         $scope.objects[a] = $scope.objects[b];
         $scope.objects[b] = tmp;
     };
+
+    controller.changeExportingPercent = function(p) {
+        $scope.loading_percent = p;
+        if(!$scope.$$phase) {
+            $scope.$apply();
+        }
+    }
 
     $scope.changeTransitionFunction = function(tr, tf){
         $scope.selectedObject.changeTransitionFunction(tr, tf);
@@ -1241,14 +1286,51 @@ var main = function($scope) {
     }
 
     $scope.exportGIF = function() {
+        $scope.loading = "inherit";
+        $scope.loading_percent = 0;
+
         if(GIFEncoderLoaded) {
-            alert("unfinished function");
+            encodeContext.fillStyle = "#fff";
+            encodeContext.fillRect(0, 0, canvas.width, canvas.height);
+            encoder = new GIFEncoder();
+            encoder.setRepeat(0);
+            encoder.setDelay($scope.idle);
+            encoder.setSize(canvas.width, canvas.height);
+            encoder.start();
+            controller.encode();
+            encoder.finish();
+            var binaryGIF = encoder.stream().getData();
+            var GIFUrl = "data:img/gif;base64," + encode64(binaryGIF);
+            window.location.href=GIFUrl;
+            $scope.loading = "none";
         }
         else {
-            loadJS("LZWEncoder.js", loadJS("b64.js", loadJS("GIFEncoder.js", loadJS("NeuQuant.js", function() {
-                alert("unfinished function");
-                GIFEncoderLoaded = true;
-            }))));
+            loadJS("LZWEncoder.js", function() {
+                loadJS("NeuQuant.js", function() {
+                    loadJS("GIFEncoder.js", function(){
+                        loadJS("b64.js", function() {
+                            encodeCanvas = document.createElement("canvas");
+                            encodeCanvas.width = canvas.width;
+                            encodeCanvas.height = canvas.height;
+                            encodeContext = encodeCanvas.getContext("2d");
+                            encodeContext.fillStyle = "#fff";
+                            encodeContext.fillRect(0, 0, canvas.width, canvas.height);
+                            encoder = new GIFEncoder();
+                            encoder.setRepeat(0);
+                            encoder.setDelay($scope.idle);
+                            encoder.setSize(canvas.width, canvas.height);
+                            encoder.start();
+                            controller.encode();
+                            encoder.finish();
+                            var binaryGIF = encoder.stream().getData();
+                            var GIFUrl = "data:img/gif;base64," + encode64(binaryGIF);
+                            window.location.href=GIFUrl;
+                            GIFEncoderLoaded = true;
+                            $scope.loading = "none";
+                        });
+                    });
+                });
+            });
         }
     }
 }

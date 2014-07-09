@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="css/animator.css"/>
 </head>
 <body ng-controller="main">
+<div id="pop" style="display: {{loading}}">
+  <div id="loading_bar">
+    <div id="loading_percent" style="width: {{loading_percent}}%"></div>
+    <span>{{loading_percent}}%</span>
+  </div>
+</div>
 <div id="setting_bar" class="ui_window window_folded_{{folded}}">
   <div class="title"><h1>Animator</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
   <div class="content">
