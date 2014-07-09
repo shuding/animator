@@ -1,5 +1,5 @@
 /*
-* Animator.js Library v0.52
+* Animator.js Library v0.7
 * https://github.com/quietshu/Animator.js
 *
 * Copyright 2014 Shu Ding.
@@ -26,6 +26,8 @@ var timelineNowObject = undefined,
     unitListPosition = 0,
     unitDragNo = 0;
 
+var GIFEncoderLoaded = false;
+
 var fastSin = function(inValue) {
     // See for graph and equations
     // https://www.desmos.com/calculator/8nkxlrmp7a
@@ -37,6 +39,15 @@ var fastSin = function(inValue) {
         return B * inValue + C * inValue * inValue;
     }
     return B * inValue - C * inValue * inValue;
+}
+
+var loadJS = function(path, callback) {
+    var js = document.createElement("script");
+    js.type = "text/javascript";
+    js.src = "js/" + path;
+    js.onreadystatechange = callback;
+    js.onload = callback;
+    document.getElementsByTagName("head")[0].appendChild(js);
 }
 
 Element.prototype.remove = function() {
@@ -1227,6 +1238,18 @@ var main = function($scope) {
     $scope.toggleKeyFrame = function(prop) {
         $scope.selectedObject.toggleKeyFrame(prop, controller.nowFrame - 1);
         drawTimeline($scope.selectedObject);
+    }
+
+    $scope.exportGIF = function() {
+        if(GIFEncoderLoaded) {
+            alert("unfinished function");
+        }
+        else {
+            loadJS("LZWEncoder.js", loadJS("b64.js", loadJS("GIFEncoder.js", loadJS("NeuQuant.js", function() {
+                alert("unfinished function");
+                GIFEncoderLoaded = true;
+            }))));
+        }
     }
 }
 

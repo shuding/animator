@@ -127,6 +127,10 @@ input[type="number"], input[type="text"] {
     margin: 4px;
 }
 
+input[type="number"]:focus, input[type="text"]:focus {
+    outline: #555 auto 5px;
+}
+
 pre {
     background: #DDD;
     padding: 5px;

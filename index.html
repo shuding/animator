@@ -12,6 +12,8 @@
   <div class="title"><h1>Animator</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
   <div class="content">
     <div class="content_inner">
+      <h2>Export</h2>
+      <input type="submit" value=".gif" ng-click="exportGIF()"/>
       <h2>Canvas</h2>
       <ul>
         <li><span>Width:</span><input class="setting_input" id="width_input" type="number" placeholder="{{defaultWidth}}" ng-model="width" ng-change="redraw()"><span>px</span></li>
@@ -28,7 +30,7 @@
         <option value="image">//image</option>
       </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
       <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
-        <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_fillColor_key" ng-click="toggleKeyFrame('fillColor')"/></li>
+        <li><span>Fill Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-blur="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_fillColor_key" ng-click="toggleKeyFrame('fillColor')"/></li>
         <li><span>Opacity:</span><input class="setting_input" type="text" ng-model="nowObject_opacity" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_opacity_key" ng-click="toggleKeyFrame('opacity')"/></li>
         <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_x_key" ng-click="toggleKeyFrame('x')"/><span>px</span></li>
         <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_y_key" ng-click="toggleKeyFrame('y')"/><span>px</span></li>
