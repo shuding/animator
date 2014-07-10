@@ -803,8 +803,8 @@ var controller = {
         for(var i = 0; i < controller.frameCnt; ++i) {
             for(var j = 0; j < controller.layerCnt; ++j)
                 controller.layer[j].encodeWithFrame(i);
-            encoder.addFrame(encodeContext, {delay: controller.idle});
-            controller.changeExportingPercent(Math.floor(i * 100.0 / controller.frameCnt));
+            encoder.addFrame(encodeContext, {delay: controller.idle, copy: true});
+            //TODO controller.changeExportingPercent(Math.floor(i * 100.0 / controller.frameCnt));
             encodeContext.fillStyle = "#fff";
             encodeContext.fillRect(0, 0, encodeCanvas.width, encodeCanvas.height);
         }
@@ -1300,48 +1300,35 @@ var main = function($scope) {
         $scope.loading_percent = 0;
 
         if(GIFEncoderLoaded) {
+            encodeCanvas.width = canvas.width;
+            encodeCanvas.height = canvas.height;
+            encodeContext = encodeCanvas.getContext("2d");
             encodeContext.fillStyle = "#fff";
             encodeContext.fillRect(0, 0, canvas.width, canvas.height);
-            encoder = new GIFEncoder();
-            encoder.setRepeat(0);
-            encoder.setDelay($scope.idle);
-            encoder.setSize(canvas.width, canvas.height);
-            encoder.start();
+            encoder = new GIF({
+                workers: 2,
+                workerScript: "./js/gif.worker.js",
+                quality: 10,
+                width: canvas.width,
+                height: canvas.height
+            });
+            encoder.on("progress", function(p) {
+                $scope.loading_percent = Math.floor(p * 100);
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            });
+            encoder.on("finished", function(blob) {
+                $scope.loading = "none";
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
+                window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
+            });
             controller.encode();
-            encoder.finish();
-            var binaryGIF = encoder.stream().getData();
-            var GIFUrl = "data:img/gif;base64," + encode64(binaryGIF);
-            window.location.href=GIFUrl;
-            $scope.loading = "none";
+            encoder.render();
         }
         else {
-            /*
-            loadJS("LZWEncoder.js", function() {
-                loadJS("NeuQuant.js", function() {
-                    loadJS("GIFEncoder.js", function(){
-                        loadJS("b64.js", function() {
-                            encodeCanvas = document.createElement("canvas");
-                            encodeCanvas.width = canvas.width;
-                            encodeCanvas.height = canvas.height;
-                            encodeContext = encodeCanvas.getContext("2d");
-                            encodeContext.fillStyle = "#fff";
-                            encodeContext.fillRect(0, 0, canvas.width, canvas.height);
-                            encoder = new GIFEncoder();
-                            encoder.setRepeat(0);
-                            encoder.setDelay($scope.idle);
-                            encoder.setSize(canvas.width, canvas.height);
-                            encoder.start();
-                            controller.encode();
-                            encoder.finish();
-                            var binaryGIF = encoder.stream().getData();
-                            var GIFUrl = "data:img/gif;base64," + encode64(binaryGIF);
-                            window.location.href=GIFUrl;
-                            GIFEncoderLoaded = true;
-                            $scope.loading = "none";
-                        });
-                    });
-                });
-            });*/
             loadJS("gif.js", function() {
                 encodeCanvas = document.createElement("canvas");
                 encodeCanvas.width = canvas.width;
@@ -1349,18 +1336,28 @@ var main = function($scope) {
                 encodeContext = encodeCanvas.getContext("2d");
                 encodeContext.fillStyle = "#fff";
                 encodeContext.fillRect(0, 0, canvas.width, canvas.height);
-                encoder = new GIF();
-                controller.encode();
-                /*
-                encoder.on('finished', function(blob) {
-                    alert("!");
-                    window.open(URL.createObjectURL(blob));
+                encoder = new GIF({
+                    workers: 5,
+                    workerScript: "./js/gif.worker.js",
+                    quality: 10,
+                    width: canvas.width,
+                    height: canvas.height
                 });
-                encoder.render();*/
-                $scope.loading = "none";
-                if(!$scope.$$phase) {
-                    $scope.$apply();
-                }
+                encoder.on("progress", function(p) {
+                    $scope.loading_percent = Math.floor(p * 100);
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                });
+                encoder.on("finished", function(blob) {
+                    $scope.loading = "none";
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                    window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
+                });
+                controller.encode();
+                encoder.render();
             });
         }
     }
