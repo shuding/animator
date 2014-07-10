@@ -26,11 +26,8 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="1785">
-              <folding>
-                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="-0.0" vertical-offset="221" max-vertical-offset="1785">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -38,10 +35,19 @@
       <file leaf-file-name="animator.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/animator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="780" column="21" selection-start="28249" selection-end="28249" vertical-scroll-proportion="0.32" vertical-offset="12980" max-vertical-offset="23460">
+            <state line="126" column="56" selection-start="6399" selection-end="6399" vertical-scroll-proportion="0.6086331" vertical-offset="1719" max-vertical-offset="23987">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="animator.test.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/animator.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5242" max-vertical-offset="6069">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -49,10 +55,8 @@
       <file leaf-file-name="NeuQuant.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/NeuQuant.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="12" selection-start="1223" selection-end="1231" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11458">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state line="510" column="21" selection-start="13573" selection-end="13573" vertical-scroll-proportion="0.0" vertical-offset="8251" max-vertical-offset="11458">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,7 +64,7 @@
       <file leaf-file-name="b64.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/b64.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="616" selection-end="616" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+            <state line="18" column="0" selection-start="616" selection-end="616" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="408">
               <folding />
             </state>
           </provider>
@@ -112,14 +116,15 @@
         <option value="$PROJECT_DIR$/js/GIFEncoder.js" />
         <option value="$PROJECT_DIR$/css/animator.css" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/js/NeuQuant.js" />
         <option value="$PROJECT_DIR$/js/animator.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
-    <option name="width" value="1920" />
-    <option name="height" value="1006" />
+    <option name="width" value="1440" />
+    <option name="height" value="826" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -311,7 +316,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1920" height="1006" extended-state="6" />
+    <frame x="0" y="22" width="1440" height="826" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -352,29 +357,10 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="0" selection-start="2991" selection-end="2991" vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="13022">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/animator.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="228" column="32" selection-start="3922" selection-end="3922" vertical-scroll-proportion="0.0" vertical-offset="3343" max-vertical-offset="4624">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="53" column="106" selection-start="4459" selection-end="4459" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1292">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -397,10 +383,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="63" column="54" selection-start="4973" selection-end="4973" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1292">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -423,10 +406,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="63" column="54" selection-start="4973" selection-end="4973" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="1292">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -449,10 +429,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="40" column="125" selection-start="3592" selection-end="3605" vertical-scroll-proportion="0.0" vertical-offset="112" max-vertical-offset="1275">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -475,10 +452,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="33" selection-start="307" selection-end="307" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="272">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -494,10 +468,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="7" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -666,15 +637,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/NeuQuant.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="12" selection-start="1223" selection-end="1231" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11458">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/animator.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="407" column="9" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.0" vertical-offset="6235" max-vertical-offset="7157">
@@ -682,19 +644,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/NeuQuant.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="510" column="21" selection-start="13573" selection-end="13573" vertical-scroll-proportion="0.0" vertical-offset="8251" max-vertical-offset="11458">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="1785">
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="1785">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/gif.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="4929" selection-start="4929" selection-end="4929" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="695">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/animator.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5242" max-vertical-offset="6069">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/animator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="780" column="21" selection-start="28249" selection-end="28249" vertical-scroll-proportion="0.32" vertical-offset="12980" max-vertical-offset="23460">
+        <state line="126" column="56" selection-start="6399" selection-end="6399" vertical-scroll-proportion="0.6086331" vertical-offset="1719" max-vertical-offset="23987">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

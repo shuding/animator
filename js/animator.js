@@ -130,36 +130,46 @@ var color = {
 
 var easing = {
     functions: [
-        "linear", "ease-in-sin", "ease-out-sin", "ease-in-out-sin"
+        "linear", "easeInQuad", "easeOutQuad", "easeInOutQuad",
+        "easeInCubic", "easeOutCubic", "easeInOutCubic", "easeInQuart",
+        "easeOutQuart", "easeInOutQuart", "easeInQuint", "easeOutQuint", "easeInOutQuint"
     ],
+    // private functions
+    // easing functions refer to https://gist.github.com/gre/1650294
+    easingFunctions: {
+        // no easing, no acceleration
+        linear: function (t) { return t },
+        // accelerating from zero velocity
+        easeInQuad: function (t) { return t*t },
+        // decelerating to zero velocity
+        easeOutQuad: function (t) { return t*(2-t) },
+        // acceleration until halfway, then deceleration
+        easeInOutQuad: function (t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t },
+        // accelerating from zero velocity
+        easeInCubic: function (t) { return t*t*t },
+        // decelerating to zero velocity
+        easeOutCubic: function (t) { return (--t)*t*t+1 },
+        // acceleration until halfway, then deceleration
+        easeInOutCubic: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 },
+        // accelerating from zero velocity
+        easeInQuart: function (t) { return t*t*t*t },
+        // decelerating to zero velocity
+        easeOutQuart: function (t) { return 1-(--t)*t*t*t },
+        // acceleration until halfway, then deceleration
+        easeInOutQuart: function (t) { return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t },
+        // accelerating from zero velocity
+        easeInQuint: function (t) { return t*t*t*t*t },
+        // decelerating to zero velocity
+        easeOutQuint: function (t) { return 1+(--t)*t*t*t*t },
+        // acceleration until halfway, then deceleration
+        easeInOutQuint: function (t) { return t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t }
+    },
     calc: function(func, n, startFrame, endFrame, startValue, endValue) {
-        var v;
-        switch (func) {
-            case "linear":
-                v = (n - startFrame) * 1. / (endFrame - startFrame - 1)
-                    * (endValue - startValue)
-                    + startValue;
-                break;
-            case "ease-in-sin":
-                v = (fastSin(1.570796327 * (n - startFrame) / (endFrame - startFrame - 1) - 1.570796327) + 1)
-                    * (endValue - startValue)
-                    + startValue;
-                break;
-            case "ease-out-sin":
-                v = fastSin(1.570796327 * (n - startFrame) / (endFrame - startFrame - 1))
-                    * (endValue - startValue)
-                    + startValue;
-                break;
-            case "ease-in-out-sin":
-                v = (fastSin(3.141592654 * (n - startFrame) / (endFrame - startFrame - 1) - 1.570796327) * .5 + .5)
-                    * (endValue - startValue)
-                    + startValue;
-                break;
-            default:
-                v = 1. * (n - startFrame) / (endFrame - startFrame - 1)
-                    * (endValue - startValue)
-                    + startValue;
-        };
+        var t = (n - startFrame) * 1. / (endFrame - startFrame - 1);
+        if(!easing.easingFunctions[func])
+            func = "linear";
+        var v = easing.easingFunctions[func](t);
+        v = v * (endValue - startValue) + startValue;
         return v;
     }
 };
@@ -760,7 +770,7 @@ var controller = {
         ++controller.nowFrame;
         frameInfo.innerHTML = controller.nowFrame + "/" + controller.frameCnt;
     },
-    drawFrameWithNumber: function(n){
+    drawFrameWithNumber: function(n) {
         if(n < controller.frameCnt){
             clearCanvas();
             for(var i = 0; i < controller.layerCnt; ++i)
@@ -772,7 +782,7 @@ var controller = {
         }
         controller.nowFrame = (+n) + 1;
     },
-    restart: function(){
+    restart: function() {
         controller.nowFrame = 0;
         controller.playing = false;
         clearInterval(controller.timeInterval);
@@ -793,13 +803,13 @@ var controller = {
         for(var i = 0; i < controller.frameCnt; ++i) {
             for(var j = 0; j < controller.layerCnt; ++j)
                 controller.layer[j].encodeWithFrame(i);
-            encoder.addFrame(encodeContext);
+            encoder.addFrame(encodeContext, {delay: controller.idle});
             controller.changeExportingPercent(Math.floor(i * 100.0 / controller.frameCnt));
             encodeContext.fillStyle = "#fff";
             encodeContext.fillRect(0, 0, encodeCanvas.width, encodeCanvas.height);
         }
     },
-    redraw: function(){
+    redraw: function() {
         controller.drawFrameWithNumber(controller.nowFrame - 1);
     },
     getObjectAt: function(x, y) {
@@ -1305,6 +1315,7 @@ var main = function($scope) {
             $scope.loading = "none";
         }
         else {
+            /*
             loadJS("LZWEncoder.js", function() {
                 loadJS("NeuQuant.js", function() {
                     loadJS("GIFEncoder.js", function(){
@@ -1330,6 +1341,26 @@ var main = function($scope) {
                         });
                     });
                 });
+            });*/
+            loadJS("gif.js", function() {
+                encodeCanvas = document.createElement("canvas");
+                encodeCanvas.width = canvas.width;
+                encodeCanvas.height = canvas.height;
+                encodeContext = encodeCanvas.getContext("2d");
+                encodeContext.fillStyle = "#fff";
+                encodeContext.fillRect(0, 0, canvas.width, canvas.height);
+                encoder = new GIF();
+                controller.encode();
+                /*
+                encoder.on('finished', function(blob) {
+                    alert("!");
+                    window.open(URL.createObjectURL(blob));
+                });
+                encoder.render();*/
+                $scope.loading = "none";
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
             });
         }
     }
