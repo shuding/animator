@@ -23,19 +23,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="-0.0" vertical-offset="221" max-vertical-offset="1785">
+            <state line="21" column="19" selection-start="868" selection-end="875" vertical-scroll-proportion="0.16018845" vertical-offset="221" max-vertical-offset="1802">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="animator.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="animator.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/animator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1359" column="33" selection-start="50211" selection-end="50211" vertical-scroll-proportion="0.9028571" vertical-offset="22313" max-vertical-offset="23936">
+            <state line="1341" column="27" selection-start="49418" selection-end="49425" vertical-scroll-proportion="0.0" vertical-offset="22449" max-vertical-offset="23936">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -46,7 +46,7 @@
       <file leaf-file-name="gif.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/gif.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="4304" selection-start="4304" selection-end="4304" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="153">
+            <state line="0" column="4304" selection-start="4304" selection-end="4304" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="153">
               <folding />
             </state>
           </provider>
@@ -54,20 +54,20 @@
       </file>
       <file leaf-file-name="gif.js.map" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/gif.js.map">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="102">
-              <folding />
-            </state>
-          </provider>
           <provider editor-type-id="sourcemapFileViewerProvider">
             <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="102">
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="animator.test.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/animator.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5242" max-vertical-offset="6069">
+            <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5474" max-vertical-offset="6069">
               <folding />
             </state>
           </provider>
@@ -76,7 +76,7 @@
       <file leaf-file-name="animator.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/animator.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="407" column="9" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.0" vertical-offset="6235" max-vertical-offset="7157">
+            <state line="407" column="9" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.0" vertical-offset="6919" max-vertical-offset="7157">
               <folding />
             </state>
           </provider>
@@ -109,9 +109,9 @@
         <option value="$PROJECT_DIR$/js/angular.min.js" />
         <option value="$PROJECT_DIR$/js/GIFEncoder.js" />
         <option value="$PROJECT_DIR$/css/animator.css" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/NeuQuant.js" />
         <option value="$PROJECT_DIR$/js/animator.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -225,14 +225,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -243,15 +235,23 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
       <setting name="configLocationType" value="CONFIG_FILE" />
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -325,11 +325,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -351,6 +351,30 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/js/gif.js.map">
+      <provider editor-type-id="sourcemapFileViewerProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="102">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/animator.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5474" max-vertical-offset="6069">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/animator.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="407" column="9" selection-start="6562" selection-end="6562" vertical-scroll-proportion="0.0" vertical-offset="6919" max-vertical-offset="7157">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/animator.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="616" column="35" selection-start="19471" selection-end="19471" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="13022">
@@ -589,11 +613,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/animator.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="5" selection-start="63" selection-end="63" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="204" />
-      </provider>
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="5" selection-start="63" selection-end="63" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="204" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/demo.html">
@@ -625,18 +649,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/gif.js.map">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="102">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="sourcemapFileViewerProvider">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="27" selection-start="571" selection-end="571" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="1785">
+        <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="102">
           <folding />
         </state>
       </provider>
@@ -650,10 +667,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/animator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1359" column="33" selection-start="50211" selection-end="50211" vertical-scroll-proportion="0.9028571" vertical-offset="22313" max-vertical-offset="23936">
+        <state line="1341" column="27" selection-start="49418" selection-end="49425" vertical-scroll-proportion="0.0" vertical-offset="22449" max-vertical-offset="23936">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="19" selection-start="868" selection-end="875" vertical-scroll-proportion="0.16018845" vertical-offset="221" max-vertical-offset="1802">
+          <folding />
         </state>
       </provider>
     </entry>
