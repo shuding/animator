@@ -26,7 +26,7 @@
       <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="32" selection-start="2254" selection-end="2254" vertical-scroll-proportion="0.4204947" vertical-offset="289" max-vertical-offset="2040">
+            <state line="53" column="13" selection-start="4169" selection-end="4169" vertical-scroll-proportion="0.69964665" vertical-offset="307" max-vertical-offset="2040">
               <folding>
                 <element signature="n#style#0;n#li#2;n#ul#1;n#div#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#li#3;n#ul#1;n#div#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -50,7 +50,7 @@
       <file leaf-file-name="animator.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/animator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="722" column="53" selection-start="26972" selection-end="26972" vertical-scroll-proportion="0.0" vertical-offset="11501" max-vertical-offset="25738">
+            <state line="40" column="35" selection-start="866" selection-end="866" vertical-scroll-proportion="0.0" vertical-offset="507" max-vertical-offset="25517">
               <folding />
             </state>
           </provider>
@@ -72,15 +72,6 @@
           </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="13886" selection-start="13878" selection-end="13886" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="102">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="animator.test.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/animator.test.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5474" max-vertical-offset="6069">
               <folding />
             </state>
           </provider>
@@ -118,8 +109,8 @@
         <option value="$PROJECT_DIR$/../quietshu/_layouts/menu.html" />
         <option value="$PROJECT_DIR$/../quietshu/css/main.css" />
         <option value="$PROJECT_DIR$/css/animator.css" />
-        <option value="$PROJECT_DIR$/js/animator.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/js/animator.js" />
       </list>
     </option>
   </component>
@@ -480,139 +471,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="2582" selection-end="2582" vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="1683" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="31" selection-start="1306" selection-end="1306" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1224" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="199" column="0" selection-start="3308" selection-end="3308" vertical-scroll-proportion="0.0" vertical-offset="2759" max-vertical-offset="3757" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="22" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="2582" selection-end="2582" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1683" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="1" selection-start="1273" selection-end="1273" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1224" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="199" column="0" selection-start="3308" selection-end="3308" vertical-scroll-proportion="0.0" vertical-offset="2759" max-vertical-offset="3757" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="22" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="23" selection-start="1410" selection-end="1410" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1275" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorUI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="48" selection-start="252" selection-end="252" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="204" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="27" selection-start="200" selection-end="200" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="255" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="17" selection-start="2225" selection-end="2225" vertical-scroll-proportion="0.0" vertical-offset="1637" max-vertical-offset="2550" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="22" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0" vertical-offset="986" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="39" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0" vertical-offset="65" max-vertical-offset="952" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="4" selection-start="1013" selection-end="1013" vertical-scroll-proportion="0.0" vertical-offset="481" max-vertical-offset="1972" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="22" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="39" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="952" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="4" selection-start="1013" selection-end="1013" vertical-scroll-proportion="0.0" vertical-offset="481" max-vertical-offset="1972" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="22" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorUI.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="27" selection-start="27" selection-end="27" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="119" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/css/demo.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="167" column="11" selection-start="2739" selection-end="2739" vertical-scroll-proportion="0.08762322" vertical-offset="2759" max-vertical-offset="3757" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="41" selection-start="375" selection-end="375" vertical-scroll-proportion="-5.230769" vertical-offset="0" max-vertical-offset="1683" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="390" selection-end="390" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2278" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tool/js/animatorController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="38" selection-start="984" selection-end="2633" vertical-scroll-proportion="0.0" vertical-offset="651" max-vertical-offset="1564" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/animator.md">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="5" selection-start="63" selection-end="63" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="204" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="7" selection-start="391" selection-end="391" vertical-scroll-proportion="0.22025913" vertical-offset="0" max-vertical-offset="849" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/angular.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="208" column="736" selection-start="104412" selection-end="104412" vertical-scroll-proportion="0.8532374" vertical-offset="2943" max-vertical-offset="3638">
@@ -664,13 +522,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/animator.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="322" column="56" selection-start="8804" selection-end="8804" vertical-scroll-proportion="0.0" vertical-offset="5143" max-vertical-offset="6069">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/gif.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="4304" selection-start="4304" selection-end="4304" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="153">
@@ -680,14 +531,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/animator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="722" column="53" selection-start="26972" selection-end="26972" vertical-scroll-proportion="0.0" vertical-offset="11501" max-vertical-offset="25738">
+        <state line="40" column="35" selection-start="866" selection-end="866" vertical-scroll-proportion="0.0" vertical-offset="507" max-vertical-offset="25517">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="32" selection-start="2254" selection-end="2254" vertical-scroll-proportion="0.4204947" vertical-offset="289" max-vertical-offset="2040">
+        <state line="53" column="13" selection-start="4169" selection-end="4169" vertical-scroll-proportion="0.69964665" vertical-offset="307" max-vertical-offset="2040">
           <folding>
             <element signature="n#style#0;n#li#2;n#ul#1;n#div#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#li#3;n#ul#1;n#div#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />

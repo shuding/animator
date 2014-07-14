@@ -31,19 +31,6 @@ var GIFEncoderLoaded = false,
     encodeCanvas,
     encodeContext;
 
-var fastSin = function(inValue) {
-    // See for graph and equations
-    // https://www.desmos.com/calculator/8nkxlrmp7a
-    // logic explained here : http://devmaster.net/posts/9648/fast-and-accurate-sine-cosine
-    var B = 1.2732395; // 4/pi
-    var C = -0.40528473; // -4 / (pi²)
-
-    if (inValue > 0) {
-        return B * inValue + C * inValue * inValue;
-    }
-    return B * inValue - C * inValue * inValue;
-}
-
 var loadJS = function(path, callback) {
     var js = document.createElement("script");
     js.type = "text/javascript";
