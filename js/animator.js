@@ -507,6 +507,22 @@ var geometric = {
                         o = g;
                     context.closePath();
                     break;
+                case "text":
+                    context.save();
+                    g.calcSize();
+                    context.translate(g.x + g.width * .5, g.y + g.height * .5);
+                    if(g.rotate)
+                        context.rotate(g.rotate * .017453293);
+                    context.beginPath();
+                    context.rect(-g.width * .5, -g.height * .5, g.width, g.height);
+                    if(g.rotate)
+                        context.rotate(-g.rotate * .017453293);
+                    context.translate(-g.x - g.width * .5, -g.y - g.height * .5);
+                    if(context.isPointInPath(x, y))
+                        o = g;
+                    context.closePath();
+                    context.restore();
+                    break;
                 default :
             }
             return o;
@@ -520,6 +536,9 @@ var geometric = {
                         break;
                     case "circle":
                         g.drawSelectedBox(g.x - g.r, g.y - g.r, g.r * 2, g.r * 2);
+                        break;
+                    case "text":
+                        g.drawSelectedBox(g.x, g.y, g.width, g.height);
                         break;
                     default :
                 }
@@ -663,7 +682,89 @@ var circle = {
         };
         return c;
     }
-}
+};
+
+var text = {
+    createNew: function(){
+        var t = geometric.createNew();
+        t.type = "text";
+        t.x = 50;
+        t.y = 50;
+        t.height = 0;
+        t.width = 0;
+        t.content = "text";
+        t.stroke = false;
+        t.font = "20pt Helvetica";
+        t.propertys = [
+            "fillColor",
+            "opacity",
+            "x",
+            "y",
+            "content",
+            "font",
+            "rotate"
+        ];
+        t.initTransition();
+
+        t.save = function(){
+            t.saveGeometric();
+            t.x_ = t.x;
+            t.y_ = t.y;
+        };
+        t.restore = function(){
+            t.restoreGeometric();
+            t.x = t.x_;
+            t.y = t.y_;
+        };
+        t.calcSize = function() {
+            var ctx = context;
+            ctx.save();
+            ctx.font = t.font;
+            var metrics = ctx.measureText(t.content);
+            t.width = metrics.width;
+            t.height = parseFloat(t.font);
+            ctx.restore();
+            return t;
+        };
+        t.draw = function(c){
+            var ctx;
+            if(c)
+                ctx = c;
+            else
+                ctx = context;
+            ctx.save();
+            t.calcSize();
+            ctx.translate(t.x + t.width * .5, t.y + t.height * 1.5);
+            if(t.rotate)
+                ctx.rotate(t.rotate * .017453293);
+            //context.translate(t.x + t.width *.5, t.y + t.height *.5);
+            ctx.globalAlpha = t.opacity;
+            ctx.fillStyle = t.fillColor;
+            //context.fillRect(t.x, t.y, t.width, t.height);
+            ctx.font = t.font;
+            ctx.fillText(t.content, -t.width * .5, - t.height * .5);
+            if(t.stroke) {
+                ctx.strokeStyle = t.strokeColor;
+                ctx.lineWidth = t.lineWidth;
+                ctx.stroke();
+            }
+            ctx.restore();
+            if(!c)
+                t.drawGeometric();
+        };
+        t.drawFunction = function(n){
+            //t.save();
+            t.transitionFrame(n);
+            t.draw();
+            //t.restore();
+        };
+        t.encodeWithFrame = function(n) {
+            t.transitionFrame(n);
+            t.draw(encodeContext);
+        };
+        return t;
+    }
+};
 
 var layer = {
     createNew: function(){
@@ -1088,6 +1189,18 @@ var main = function($scope) {
                         "width": 100,
                         "height": 100,
                         "fillColor": "#000000",
+                        "opacity": 1,
+                        "rotate": 0
+                    });
+                break;
+            case "text":
+                o = text.createNew()
+                    .name('text' + (unitCnt++))
+                    .set({
+                        "x": 0,
+                        "y": 0,
+                        "fillColor": "#000000",
+                        "width": 0,
                         "opacity": 1,
                         "rotate": 0
                     });
