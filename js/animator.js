@@ -1295,7 +1295,15 @@ var main = function($scope) {
         drawTimeline($scope.selectedObject);
     }
 
+    $scope.closePop = function() {
+        $scope.loading = "none";
+        if(!$scope.$$phase) {
+            $scope.$apply();
+        }
+    }
+
     $scope.exportGIF = function() {
+        document.getElementById("pop_content").innerHTML = "";
         $scope.loading = "inherit";
         $scope.loading_percent = 0;
 
@@ -1319,11 +1327,8 @@ var main = function($scope) {
                 }
             });
             encoder.on("finished", function(blob) {
-                $scope.loading = "none";
-                if(!$scope.$$phase) {
-                    $scope.$apply();
-                }
-                window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
+                document.getElementById("pop_content").innerHTML = "<img class='abs_center' src='" + URL.createObjectURL(blob) + "'/>";
+                //window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
             });
             controller.encode();
             encoder.render();
@@ -1350,11 +1355,8 @@ var main = function($scope) {
                     }
                 });
                 encoder.on("finished", function(blob) {
-                    $scope.loading = "none";
-                    if(!$scope.$$phase) {
-                        $scope.$apply();
-                    }
-                    window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
+                    document.getElementById("pop_content").innerHTML = "<img class='abs_center' src='" + URL.createObjectURL(blob) + "'/>";
+                    //window.open(URL.createObjectURL(blob), "_blank", "width=" + encodeCanvas.width + ", height=" + encodeCanvas.height);
                 });
                 controller.encode();
                 encoder.render();

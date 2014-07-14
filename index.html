@@ -10,8 +10,10 @@
 <body ng-controller="main">
 <div id="pop" style="display: {{loading}}">
   <div id="loading_bar">
+    <div id="pop_close" ng-click="closePop()">×</div>
     <div id="loading_percent" style="width: {{loading_percent}}%"></div>
     <span>{{loading_percent}}%</span>
+    <span id="pop_content"></span>
   </div>
 </div>
 <div id="setting_bar" class="ui_window window_folded_{{folded}}">

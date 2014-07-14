@@ -414,3 +414,32 @@ code, textarea {
   color: #000;
   margin: auto;
 }
+
+#pop #pop_close {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  display: block;
+  padding: 6px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10000;
+  -webkit-transition: all .2s ease;
+  -moz-transition: all .2s ease;
+  transition: all .2s ease;
+}
+
+#pop #pop_close:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.abs_center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
