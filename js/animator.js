@@ -753,6 +753,44 @@ var text = {
     }
 };
 
+var image = {
+    createNew: function() {
+        var i = geometric.createNew();
+        i.type = "image";
+        i.x = 50;
+        i.y = 50;
+        i.height = 50;
+        i.width = 50;
+        i.propertys = [
+            "fillColor",
+            "opacity",
+            "x",
+            "y",
+            "width",
+            "height",
+            "rotate"
+        ];
+        i.initTransition();
+
+        i.save = function(){
+            i.saveGeometric();
+            i.x_ = i.x;
+            i.y_ = i.y;
+            i.width_ = i.width;
+            i.height_ = i.height;
+        };
+        i.restore = function(){
+            i.restoreGeometric();
+            i.x = i.x_;
+            i.y = i.y_;
+            i.width = i.width_;
+            i.height = i.height_;
+        };
+        // TODO
+        return i;
+    }
+};
+
 var layer = {
     createNew: function(){
         var l = {};
@@ -846,16 +884,15 @@ var controller = {
                     (n - controller.layer[i].startFrame)
                 );
             slider.value = Math.floor(10000. * n / controller.frameCnt);
-            drawTimelineTransition();
         }
         else {
             slider.value = Math.floor(10000. * n / controller.frameCnt);
-            drawTimelineTransition();
             clearInterval(controller.timeInterval);
             controller.playing = false;
             return;
         }
         ++controller.nowFrame;
+        drawTimelineTransition();
         frameInfo.innerHTML = controller.nowFrame + "/" + controller.frameCnt;
     },
     drawFrameWithNumber: function(n) {
@@ -866,9 +903,9 @@ var controller = {
                     (n - controller.layer[i].startFrame)
                 );
             frameInfo.innerHTML = (n + 1) + "/" + controller.frameCnt;
-            drawTimelineTransition();
         }
         controller.nowFrame = (+n) + 1;
+        drawTimelineTransition();
     },
     restart: function() {
         controller.nowFrame = 0;
@@ -1015,7 +1052,7 @@ window.onload = function(){
     timelineContext = timelineCanvas.getContext("2d");
     clearTimeline();
 
-    slider.onmousemove = function(){
+    slider.onclick = slider.onmousemove = function(){
         if(this.value != lastValue){
             var frameNow = this.value / 10000. * controller.frameCnt;
             controller.drawFrameWithNumber(Math.floor(frameNow));
@@ -1025,7 +1062,7 @@ window.onload = function(){
     document.getElementsByName("play")[0].onclick = function(){
         controller.play();
     }
-    document.getElementsByName("scale")[0].onmousemove = function(){
+    document.getElementsByName("scale")[0].onclick = document.getElementsByName("scale")[0].onmousemove = function(){
         if(this.value != lastScaleValue){
             var s = 1. * this.value / 100;
             canvas.style["-webkit-transform"] = "scale(" + s + ',' + s + ')';
@@ -1188,6 +1225,19 @@ var main = function($scope) {
                         "y": 0,
                         "fillColor": "#000000",
                         "width": 0,
+                        "opacity": 1,
+                        "rotate": 0
+                    });
+                break;
+            case "image":
+                o = image.createNew()
+                    .name('image' + (unitCnt++))
+                    .set({
+                        "x": 0,
+                        "y": 0,
+                        "fillColor": "#000000",
+                        "width": 100,
+                        "height": 100,
                         "opacity": 1,
                         "rotate": 0
                     });

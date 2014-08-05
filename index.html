@@ -35,7 +35,7 @@
         <option value="circle">circle</option>
         <option value="rectangle">rectangle</option>
         <option value="text">text</option>
-        <option value="image">//image</option>
+        <option value="image">image</option>
       </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
       <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
         <li><span>Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-blur="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_fillColor_key" ng-click="toggleKeyFrame('fillColor')"/></li>
