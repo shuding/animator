@@ -51,10 +51,10 @@
         <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}">
           <span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_r_key" ng-click="toggleKeyFrame('r')"/><span>px</span>
         </li>
-        <li style="display: {{selectedObject.type == 'rectangle' ? 'inherit' : 'none'}}">
+        <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
           <span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_width_key" ng-click="toggleKeyFrame('width')"/><span>px</span>
         </li>
-        <li style="display: {{selectedObject.type == 'rectangle' ? 'inherit' : 'none'}}">
+        <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
           <span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_height_key" ng-click="toggleKeyFrame('height')"/><span>px</span>
         </li>
         <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObject_rotate" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_rotate_key" ng-click="toggleKeyFrame('rotate')"/><span>deg</span></li>

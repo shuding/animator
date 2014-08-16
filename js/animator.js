@@ -31,6 +31,8 @@ var GIFEncoderLoaded = false,
     encodeCanvas,
     encodeContext;
 
+var imgTmp = document.createElement("IMG");
+
 var loadJS = function(path, callback) {
     var js = document.createElement("script");
     js.type = "text/javascript";
@@ -510,6 +512,21 @@ var geometric = {
                     context.closePath();
                     context.restore();
                     break;
+                case "image":
+                    context.save();
+                    context.translate(g.x + g.width * .5, g.y + g.height * .5);
+                    if(g.rotate)
+                        context.rotate(g.rotate * .017453293);
+                    context.beginPath();
+                    context.rect(-g.width * .5, -g.height * .5, g.width, g.height);
+                    if(g.rotate)
+                        context.rotate(-g.rotate * .017453293);
+                    context.translate(-g.x - g.width * .5, -g.y - g.height * .5);
+                    if(context.isPointInPath(x, y))
+                        o = g;
+                    context.closePath();
+                    context.restore();
+                    break;
                 default :
             }
             return o;
@@ -525,6 +542,9 @@ var geometric = {
                         g.drawSelectedBox(g.x - g.r, g.y - g.r, g.r * 2, g.r * 2);
                         break;
                     case "text":
+                        g.drawSelectedBox(g.x, g.y, g.width, g.height);
+                        break;
+                    case "image":
                         g.drawSelectedBox(g.x, g.y, g.width, g.height);
                         break;
                     default :
@@ -721,7 +741,7 @@ var text = {
                 ctx = context;
             ctx.save();
             t.calcSize();
-            ctx.translate(t.x + t.width * .5, t.y + t.height * 1.5);
+            ctx.translate(t.x + t.width * .5, t.y + t.height * .5);
             if(t.rotate)
                 ctx.rotate(t.rotate * .017453293);
             //context.translate(t.x + t.width *.5, t.y + t.height *.5);
@@ -729,7 +749,7 @@ var text = {
             ctx.fillStyle = t.fillColor;
             //context.fillRect(t.x, t.y, t.width, t.height);
             ctx.font = t.font;
-            ctx.fillText(t.content, -t.width * .5, - t.height * .5);
+            ctx.fillText(t.content, - t.width * .5, t.height * .5);
             if(t.stroke) {
                 ctx.strokeStyle = t.strokeColor;
                 ctx.lineWidth = t.lineWidth;
@@ -768,7 +788,8 @@ var image = {
             "y",
             "width",
             "height",
-            "rotate"
+            "rotate",
+            "src"
         ];
         i.initTransition();
 
@@ -786,7 +807,30 @@ var image = {
             i.width = i.width_;
             i.height = i.height_;
         };
-        // TODO
+        i.draw = function(c_){
+            var ctx = c_ || context;
+            ctx.save();
+            ctx.globalAlpha = i.opacity;
+
+            ctx.translate(i.x + i.width * .5, i.y + i.height * .5);
+            if(i.rotate)
+                ctx.rotate(i.rotate * .017453293);
+
+            imgTmp.src = "image/default.jpg";
+            ctx.drawImage(imgTmp, -i.width * .5, -i.height * .5, i.width, i.height);
+
+            ctx.restore();
+            if(!c_)
+                i.drawGeometric();
+        };
+        i.drawFunction = function(n){
+            i.transitionFrame(n);
+            i.draw();
+        };
+        i.encodeWithFrame = function(n) {
+            i.transitionFrame(n);
+            i.draw(encodeContext);
+        };
         return i;
     }
 };
@@ -1085,10 +1129,10 @@ var resize = function(){
     var scrHeight = window.innerHeight,
         scrWidth  = window.innerWidth;
     var settingInputs = document.getElementsByClassName("setting_input");
-    for(var i = 0; i < settingInputs.length; ++i){
-        var leftPos = settingInputs[i].offsetLeft;
-        settingInputs[i].style.marginLeft = (80 - leftPos) + "px";
-    }
+    //for(var i = 0; i < settingInputs.length; ++i){
+    //    var leftPos = settingInputs[i].offsetLeft;
+//        settingInputs[i].style.marginLeft = (220 - leftPos) + "px";
+//    }
 
     var right_panel = document.getElementById("right_panel");
     right_panel.style.width = scrWidth - 242 * 2 + "px";
