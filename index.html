@@ -47,6 +47,9 @@
         <li style="display: {{selectedObject.type == 'text' ? 'inherit' : 'none'}}">
           <span>Font:</span><input class="setting_input" type="text" ng-model="nowObject_font" ng-change="setObject()"/>
         </li>
+        <li style="display: {{(selectedObject.type == 'image') ? 'inherit' : 'none'}}">
+          <span>Image:</span><input class="setting_input" type="file" ng-model="nowObject_src" onchange="angular.element(this).scope().setImage(event)" accept="image/*"/>
+        </li>
         <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_x_key" ng-click="toggleKeyFrame('x')"/><span>px</span></li>
         <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_y_key" ng-click="toggleKeyFrame('y')"/><span>px</span></li>
         <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}">

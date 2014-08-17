@@ -781,6 +781,7 @@ var image = {
         i.y = 50;
         i.height = 50;
         i.width = 50;
+        i.src = "image/default.jpg";
         i.propertys = [
             "fillColor",
             "opacity",
@@ -816,7 +817,7 @@ var image = {
             if(i.rotate)
                 ctx.rotate(i.rotate * .017453293);
 
-            imgTmp.src = "image/default.jpg";
+            imgTmp.src = i.src;
             ctx.drawImage(imgTmp, -i.width * .5, -i.height * .5, i.width, i.height);
 
             ctx.restore();
@@ -1490,7 +1491,29 @@ var main = function($scope) {
             }
             controller.redraw();
             $scope.timer = false;
+            console.log($scope.selectedObject);
         }, 300);
+    }
+
+    $scope.setImage = function(event) {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var imgFile = event.target.files[0];
+
+            // http://www.html5rocks.com/en/tutorials/file/dndfiles/
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    var src = e.target.result;
+                    $scope.selectedObject["src"] = $scope["nowObject_src"] = src;
+                    controller.redraw();
+                };
+            })(imgFile);
+
+            reader.readAsDataURL(imgFile);
+        } else {
+            alert('The File APIs are not fully supported in this browser.');
+            return;
+        }
     }
 
     $scope.setTransition = function(){
