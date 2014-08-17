@@ -3,6 +3,7 @@
 <head>
   <title>Animator</title>
   <script src="js/angular.min.js"></script>
+  <script src="js/draggable.min.js"></script>
   <script src="js/animator.js"></script>
   <link rel="stylesheet" href="css/animator.css"/>
 </head>
@@ -61,30 +62,29 @@
       </ul>
     </div>
   </div>
-</div><div id="right_panel">
-  <div id="storyboard" class="ui_window">
-    <div class="title"><h1>Storyboard</h1></div>
-    <div class="content" style="background: #E1E1E1;">
-      <div class="content_inner" style="text-align: center">
-        <canvas id="canvas" ng-mousedown="canvasMouseDown($event)" ng-mousemove="canvasDrag($event)"></canvas>
+</div>
+<div id="timeline" class="ui_window window_folded_{{folded}}" ng-controller="timeline">
+  <div class="title"><h1>Timeline</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
+  <div class="content">
+    <div class="content_inner">
+      <div id="animationControl">
+        <input type="submit" name="play" value="play/pause"/>
+        <span id="frame_number"></span>
+        <input type="range" name="frame" value="0" min="0" max="9999" step="1"/>
       </div>
+      <canvas id="timeline_canvas"></canvas>
     </div>
   </div>
-  <div id="timeline" class="ui_window window_folded_{{folded}}" ng-controller="timeline">
-    <div class="title"><h1>Timeline</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
-    <div class="content">
-      <div class="content_inner">
-        <div id="animationControl">
-          <input type="submit" name="play" value="play/pause"/>
-          <span id="frame_number"></span>
-          <input type="range" name="frame" value="0" min="0" max="9999" step="1"/>
-        </div>
-        <canvas id="timeline_canvas"></canvas>
-      </div>
+</div>
+<div id="storyboard" class="ui_window">
+  <div class="title"><h1>Storyboard</h1></div>
+  <div class="content" style="background: #E1E1E1;">
+    <div class="content_inner" style="text-align: center">
+      <canvas id="canvas" ng-mousedown="canvasMouseDown($event)" ng-mousemove="canvasDrag($event)"></canvas>
     </div>
-    <p></p>
   </div>
-</div><div id="canvas_control" class="ui_window">
+</div>
+<div id="canvas_control" class="ui_window">
   <div class="title"><h1>Canvas</h1></div>
   <div class="content">
     <div class="content_inner">
@@ -103,8 +103,8 @@
         <li class="transition-list" ng-repeat="transition in transitions">
           <span class="block">{{transition.transitionProperty}}: {{transition.startValue}} → {{transition.endValue}}</span>
           <span>function: </span><select ng-model="transitionFunction" ng-init="transitionFunction=transition.transitionFunction" ng-change="changeTransitionFunction(transition, transitionFunction)">
-            <option value="{{tr}}" ng-repeat="tr in transitionFunctions" ng-selected="tr == transitionFunction">{{tr}}</option>
-          </select>
+          <option value="{{tr}}" ng-repeat="tr in transitionFunctions" ng-selected="tr == transitionFunction">{{tr}}</option>
+        </select>
         </li>
       </ul>
     </div>

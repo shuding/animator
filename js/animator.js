@@ -1072,12 +1072,48 @@ var drawTimelineTransition = function() {
     }
 }
 
+var setDraggable = function(div, handle) {
+    var withHandle = document.getElementById(div);
+    draggable(withHandle, withHandle.getElementsByClassName(handle)[0]);
+
+    var noBounce = function() {
+        return function() {
+            withHandle.className = withHandle.className.replace(/\b bounceClass\b/,'');
+        }
+    };
+
+    var bounce = function() {
+        return function() {
+            var left   = withHandle.offsetLeft,
+                top    = withHandle.offsetTop;
+            var right  = window.innerWidth - left - withHandle.offsetWidth,
+                bottom = window.innerHeight - top - withHandle.offsetHeight;
+            if(left < 5 || right < 5 || top < 32 || bottom < 5) {
+                left = Math.max(left, 5);
+                top = Math.max(top, 32);
+                left = Math.min(left, window.innerWidth - 5 - withHandle.offsetWidth);
+                top = Math.min(top, window.innerHeight - 5 - withHandle.offsetHeight);
+                withHandle.className += " bounceClass";
+                withHandle.style.left = left + "px";
+                withHandle.style.top = top + "px";
+            }
+        }
+    };
+
+    withHandle.whenDragStarts(noBounce());
+    withHandle.whenDragStops(bounce());
+};
+
 window.onload = function(){
     canvas = document.getElementById("canvas");
     context = canvas.getContext("2d");
     frameInfo = document.getElementById("frame_number");
 
     setMainCanvasSize(250, 250);
+
+    setDraggable("setting_bar", "title");
+    setDraggable("canvas_control", "title");
+    setDraggable("timeline", "title");
 
     controller.frameCnt = 100;
     controller.idle = 16;
@@ -1128,24 +1164,7 @@ var load = function(){
 var resize = function(){
     var scrHeight = window.innerHeight,
         scrWidth  = window.innerWidth;
-    var settingInputs = document.getElementsByClassName("setting_input");
-    //for(var i = 0; i < settingInputs.length; ++i){
-    //    var leftPos = settingInputs[i].offsetLeft;
-//        settingInputs[i].style.marginLeft = (220 - leftPos) + "px";
-//    }
 
-    var right_panel = document.getElementById("right_panel");
-    right_panel.style.width = scrWidth - 242 * 2 + "px";
-
-    var storyboard = document.getElementById("storyboard");
-    storyboard.style.height = scrHeight - 252 + "px";
-
-    var contents = document.getElementsByClassName("content");
-    for(var i = 0; i < contents.length; ++i){
-        var height = contents[i].parentNode.style.height ?
-            parseInt(contents[i].parentNode.style.height) : contents[i].parentNode.clientHeight;
-        contents[i].style.height = height - 47 + "px"
-    }
 }
 
 var drop = function(event) {
