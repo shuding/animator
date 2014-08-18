@@ -2,6 +2,7 @@ animator
 ===========
 
 ![Build GIF animation with **animator**!](/demo/0.gif)
+
 Build GIF animation with **animator**!
 
 ## Demo
