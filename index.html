@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/animator.css"/>
 </head>
 <body ng-controller="main">
+<a id="github" href="https://github.com/quietshu/animator"><img style="position: absolute; top: 0; left: 0; border: 0" src="https://camo.githubusercontent.com/c6625ac1f3ee0a12250227cf83ce904423abf351/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png"></a>
 <div id="pop" style="display: {{loading}}">
   <div id="loading_bar">
     <div id="pop_close" ng-click="closePop()">×</div>
@@ -20,49 +21,61 @@
   <div class="title"><h1>Animator</h1><span class="window_btn" ng-click="btn_click()">{{window_btn}}</span></div>
   <div class="content">
     <div class="content_inner">
-      <h2>Export</h2>
-      <span>Quality</span><input class="setting_input" type="number" min="1" max="10" step="1" required="true" placeholder="10"/>
-      <input type="submit" value=".gif" ng-click="exportGIF()"/>
-      <h2>Canvas</h2>
       <ul>
-        <li><span>Width:</span><input class="setting_input" id="width_input" type="number" placeholder="{{defaultWidth}}" ng-model="width" ng-change="redraw()"><span>px</span></li>
-        <li><span>Height:</span><input class="setting_input" id="height_input" type="number" placeholder="{{defaultHeight}}" ng-model="height" ng-change="redraw()"><span>px</span></li>
-        <li><span>BG Color:</span><input class="setting_input" type="text" ng-model="color" ng-change="redraw()" placeholder="{{defaultColor}}"/></li>
-        <li><span>Frames:</span><input class="setting_input" type="number" ng-model="frames" ng-change="redraw()" placeholder="{{defaultFrames}}"/></li>
-        <li><span>Idle:</span><input class="setting_input" type="number" ng-model="idle" ng-change="redraw()" placeholder="{{defaultIdle}}"/><span>ms</span></li>
-      </ul>
-      <h2>Object</h2>
-      <select ng-model="newObjectName">
-        <option value="circle">circle</option>
-        <option value="rectangle">rectangle</option>
-        <option value="text">text</option>
-        <option value="image">image</option>
-      </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
-      <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
-        <li><span>Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-blur="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_fillColor_key" ng-click="toggleKeyFrame('fillColor')"/></li>
-        <li><span>Opacity:</span><input class="setting_input" type="text" ng-model="nowObject_opacity" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_opacity_key" ng-click="toggleKeyFrame('opacity')"/></li>
-        <li style="display: {{selectedObject.type == 'text' ? 'inherit' : 'none'}}">
-          <span>Content:</span><input class="setting_input" type="text" ng-model="nowObject_content" ng-change="setObject()"/>
+        <li>
+          <h2 ng-model="export_menu">Export</h2>
+          <ul>
+            <li><span>Quality</span><input class="setting_input" type="number" min="1" max="10" step="1" required="true" placeholder="10"/></li>
+            <li><input type="submit" value=".gif" ng-click="exportGIF()"/></li>
+          </ul>
         </li>
-        <li style="display: {{selectedObject.type == 'text' ? 'inherit' : 'none'}}">
-          <span>Font:</span><input class="setting_input" type="text" ng-model="nowObject_font" ng-change="setObject()"/>
+        <li>
+          <h2>Canvas</h2>
+          <ul>
+            <li><span>Width:</span><input class="setting_input" id="width_input" type="number" placeholder="{{defaultWidth}}" ng-model="width" ng-change="redraw()"><span>px</span></li>
+            <li><span>Height:</span><input class="setting_input" id="height_input" type="number" placeholder="{{defaultHeight}}" ng-model="height" ng-change="redraw()"><span>px</span></li>
+            <li><span>BG Color:</span><input class="setting_input" type="text" ng-model="color" ng-change="redraw()" placeholder="{{defaultColor}}"/></li>
+            <li><span>Frames:</span><input class="setting_input" type="number" ng-model="frames" ng-change="redraw()" placeholder="{{defaultFrames}}"/></li>
+            <li><span>Idle:</span><input class="setting_input" type="number" ng-model="idle" ng-change="redraw()" placeholder="{{defaultIdle}}"/><span>ms</span></li>
+          </ul>
         </li>
-        <li style="display: {{(selectedObject.type == 'image') ? 'inherit' : 'none'}}">
-          <span>Image:</span><input class="setting_input" type="file" ng-model="nowObject_src" onchange="angular.element(this).scope().setImage(event)" accept="image/*"/>
+        <li>
+          <h2>Object</h2>
+          <ul>
+            <select ng-model="newObjectName">
+              <option value="circle">circle</option>
+              <option value="rectangle">rectangle</option>
+              <option value="text">text</option>
+              <option value="image">image</option>
+            </select><span> </span><input type="submit" value="add" ng-click="addObject()"/>
+            <ul style="display: {{selectedObject ? 'inherit' : 'none'}}">
+              <li><span>Color:</span><input class="setting_input" type="text" ng-model="nowObject_fillColor" ng-blur="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_fillColor_key" ng-click="toggleKeyFrame('fillColor')"/></li>
+              <li><span>Opacity:</span><input class="setting_input" type="text" ng-model="nowObject_opacity" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_opacity_key" ng-click="toggleKeyFrame('opacity')"/></li>
+              <li style="display: {{selectedObject.type == 'text' ? 'inherit' : 'none'}}">
+                <span>Content:</span><input class="setting_input" type="text" ng-model="nowObject_content" ng-change="setObject()"/>
+              </li>
+              <li style="display: {{selectedObject.type == 'text' ? 'inherit' : 'none'}}">
+                <span>Font:</span><input class="setting_input" type="text" ng-model="nowObject_font" ng-change="setObject()"/>
+              </li>
+              <li style="display: {{(selectedObject.type == 'image') ? 'inherit' : 'none'}}">
+                <span>Image:</span><input class="setting_input" type="file" ng-model="nowObject_src" onchange="angular.element(this).scope().setImage(event)" accept="image/*"/>
+              </li>
+              <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_x_key" ng-click="toggleKeyFrame('x')"/><span>px</span></li>
+              <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_y_key" ng-click="toggleKeyFrame('y')"/><span>px</span></li>
+              <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}">
+                <span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_r_key" ng-click="toggleKeyFrame('r')"/><span>px</span>
+              </li>
+              <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
+                <span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_width_key" ng-click="toggleKeyFrame('width')"/><span>px</span>
+              </li>
+              <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
+                <span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_height_key" ng-click="toggleKeyFrame('height')"/><span>px</span>
+              </li>
+              <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObject_rotate" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_rotate_key" ng-click="toggleKeyFrame('rotate')"/><span>deg</span></li>
+            </ul>
+          </ul>
         </li>
-        <li><span>X:</span><input class="setting_input" type="number" ng-model="nowObject_x" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_x_key" ng-click="toggleKeyFrame('x')"/><span>px</span></li>
-        <li><span>Y:</span><input class="setting_input" type="number" ng-model="nowObject_y" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_y_key" ng-click="toggleKeyFrame('y')"/><span>px</span></li>
-        <li style="display: {{selectedObject.type == 'circle' ? 'inherit' : 'none'}}">
-          <span>R:</span><input class="setting_input" type="number" ng-model="nowObject_r" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_r_key" ng-click="toggleKeyFrame('r')"/><span>px</span>
-        </li>
-        <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
-          <span>Width:</span><input class="setting_input" type="number" ng-model="nowObject_width" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_width_key" ng-click="toggleKeyFrame('width')"/><span>px</span>
-        </li>
-        <li style="display: {{(selectedObject.type == 'rectangle' || selectedObject.type == 'image') ? 'inherit' : 'none'}}">
-          <span>Height:</span><input class="setting_input" type="number" ng-model="nowObject_height" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_height_key" ng-click="toggleKeyFrame('height')"/><span>px</span>
-        </li>
-        <li><span>Rotate:</span><input class="setting_input" type="number" ng-model="nowObject_rotate" ng-change="setObject()"/><input class="keypoint" type="checkbox" ng-model="nowObject_rotate_key" ng-click="toggleKeyFrame('rotate')"/><span>deg</span></li>
-      </ul>
+       </ul>
     </div>
   </div>
 </div>

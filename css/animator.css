@@ -4,6 +4,7 @@
   outline: 0;
   font-family: 'Lucida Sans', 'Lato', sans-serif;
   list-style: none;
+  cursor: default;
 }
 
 body {
@@ -11,6 +12,19 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+a#github {
+  cursor: pointer;
+  display: block;
+  width: 149px;
+  height: 149px;
+  position: absolute;
+  z-index: 1;
+}
+
+a#github img {
+  cursor: pointer;
 }
 
 h1 {
@@ -132,6 +146,45 @@ input[type="number"]:focus, input[type="text"]:focus {
   outline: #555 auto 5px;
 }
 
+.title {
+  border-radius: 10px;
+  overflow: hidden;
+}
+/*
+.content_inner ul li {
+  position: relative;
+}
+
+.content_inner ul li:hover {
+  color: #f00;
+}
+
+.content_inner ul li:hover > ul {
+  visibility: visible;
+}
+
+.content_inner ul ul {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  width: 220px;
+  background: #fff;
+  color: #000;
+  padding-left: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 1px #6B6B6B;
+  visibility: hidden;
+}
+
+.content_inner ul ul ul {
+  position: initial;
+  left: inherit;
+  top: inherit;
+  width: initial;
+  padding-left: 0;
+  box-shadow: none;
+  visibility: inherit;
+}
+*/
 pre {
   background: #DDD;
   padding: 5px;
@@ -177,11 +230,12 @@ code, textarea {
   background: #6B6B6B;
   -webkit-transition: margin .3s ease;
   -moz-transition: margin .3s ease;
-  transition: margin .3s ease;
-  overflow-y: hidden;
+  transition: margin .3s ease;.content_inner ul
+
 }
 
 .ui_window .content {
+  overflow: visible;
   opacity: 1;
   -webkit-transition: opacity .3s ease, height .3s ease;
   -moz-transition: opacity .3s ease, height .3s ease;
@@ -228,6 +282,8 @@ code, textarea {
 
 #timeline, #canvas_control, #setting_bar {
   border-radius: 10px;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
   z-index: 1;
 }

@@ -818,6 +818,9 @@ var image = {
                 ctx.rotate(i.rotate * .017453293);
 
             imgTmp.src = i.src;
+            imgTmp.onload = function() {
+                controller.redraw();
+            };
             ctx.drawImage(imgTmp, -i.width * .5, -i.height * .5, i.width, i.height);
 
             ctx.restore();
