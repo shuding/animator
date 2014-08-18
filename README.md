@@ -1,7 +1,8 @@
 animator
 ===========
 
-- ![Build GIF animation with **animator**!](/demo/0.gif)
+![Build GIF animation with **animator**!](/demo/0.gif)
+Build GIF animation with **animator**!
 
 ## Demo
 
@@ -9,8 +10,13 @@ animator
 
 Images made by **animator**:
 
-- ![demo 1](/demo/1.gif)
-- ![demo 2](/demo/2.gif "More complicate animation")
+Demo 1:
+
+![demo 1](/demo/1.gif)
+
+Demo 2:
+
+![demo 2](/demo/2.gif "More complicate animation")
 
 ## Info
 
