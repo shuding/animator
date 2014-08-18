@@ -1,6 +1,8 @@
 animator
 ===========
 
+- ![Build GIF animation with **animator**!](/demo/0.gif)
+
 ## Demo
 
 [Version 0.7 preview](http://shud.in/animator/)
